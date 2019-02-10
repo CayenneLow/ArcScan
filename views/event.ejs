@@ -5,6 +5,8 @@
             <title><%= event.name %> Event</title>
 	</head>
 	<body>
+            <% include partials/nav.ejs %>
+            <h1> <%= event.name %></h1>
             <h1> Code: <%= event.code %> </h1>
 	</body>
 </html>

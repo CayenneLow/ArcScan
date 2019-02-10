@@ -4,6 +4,7 @@
         <title>Organization</title>
     </head>
     <body>
+        <% include partials/nav.ejs %>
         <button onclick="location.href='/createEvent'"> Create New Event </button>
         <ul>
         <% for (let i = 0; i < events.length; i++) { %>
