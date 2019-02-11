@@ -50,12 +50,23 @@ module.exports = function(app) {
     });
 
     app.get('/organization', (req,res) => {
-        res.render('organization', {events:events});
+        // find all events
+        event.find({}).then((events) => {
+            let eventArray = [];
+            events.forEach((event) => {
+                eventArray.push({id: event.id, name: event.name});
+            });
+            console.log(eventArray)
+            res.render('organization', {events:eventArray});
+        })
     });
 
     app.get('/event/:id', (req,res) => {
-        let id = req.params.id - 1;
-        res.render('event', {event: events[id]});
+        // need name and code
+        event.findOne({_id: req.params.id.toString()}).then((result) => {
+            let currEvent = {name:result.name, code:result.code};
+            res.render('event', {event:currEvent});
+        })
     });
     
     app.get('/createEvent', (req, res) => {
