@@ -74,18 +74,26 @@ module.exports = function(app) {
     });
     
     app.post('/createEvent', urlencodedParser, (req, res) => {
-        let newCode = randomNumber();
+        // first chunk of code to ensure no duplicate codes (implemented in RNG)
+        event.find({}).then((event) => {
+            // buildling an array of all codes
+            let codeArray = event.map((event) => {
+                return event.code;
+            });
+            // passing array into randomNum function
+            return newCode = randomNumber(codeArray);
+        }).then((newCode) => {
+            // creates new Event and pushes to database
+            const newEvent = new event({
+                name: req.body.name,
+                date: Date(),
+                code: newCode,
+                signed: testUser
+            });
 
-        // creates new Event and pushes to database
-        const newEvent = new event({
-            name: req.body.name,
-            date: Date(),
-            code: newCode,
-            signed: testUser
+            newEvent.save();
+
+            res.redirect('/organization');
         });
-
-        newEvent.save();
-
-        res.render('createEvent');
     })
 };
