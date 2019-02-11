@@ -2,6 +2,31 @@ var bodyParser = require('body-parser');
 var {randomNumber} = require('./RNG.js');
 var urlencodedParser = bodyParser.urlencoded({extended: false});
 
+// database
+var mongoose = require('mongoose');
+mongoose.connect('mongodb://admin:Admin123@ds331135.mlab.com:31135/arcscan',{useNewUrlParser:true});
+// models
+const database = require('./models/database.js'); 
+const user = database.user;
+const event = database.event;
+const org = database.org;
+
+const testUser = new user({
+    firstname: 'Khye',
+    lastname: 'Low',
+    zID: 5173671,
+    email: 'lowkhyeean@gmail.com'
+})
+
+/*
+const newEvent = new event({
+    name: 'Barbeque',
+    date: Date(),
+    signed: newUser
+});
+
+newEvent.save();
+*/
 
 module.exports = function(app) {
     app.get('/', (req, res) => {
@@ -12,21 +37,16 @@ module.exports = function(app) {
         res.render('student', {found:true});
     });
     
-    let events = [{id:1, name:'Hackathon', code:randomNumber()}, {id:2, name:'Barbeque', code:randomNumber()}];
-
     app.post('/student', urlencodedParser, (req, res) => {
-        let returnEvent;
         let inputCode = req.body.inputCode;
-        events.forEach(event => {
-            if (event.code == inputCode) {
-               returnEvent = event; 
+        // query the event that has the code
+        event.findOne({code:inputCode}).then(result => {
+            if (result != null) {
+                res.render('student-success', {event:result.name});
+            } else {
+                res.render('student', {found: false});
             }
-        }); 
-        if(returnEvent != undefined){
-            res.render('student-success', {event:returnEvent});
-        } else {
-            res.render('student', {found: false});
-        }
+        })
     });
 
     app.get('/organization', (req,res) => {
@@ -44,8 +64,17 @@ module.exports = function(app) {
     
     app.post('/createEvent', urlencodedParser, (req, res) => {
         let newCode = randomNumber();
-        events.push({id:events.length+1, name:req.body.name, code:newCode});
-        console.log(events);
+
+        // creates new Event and pushes to database
+        const newEvent = new event({
+            name: req.body.name,
+            date: Date(),
+            code: newCode,
+            signed: testUser
+        });
+
+        newEvent.save();
+
         res.render('createEvent');
     })
 };
