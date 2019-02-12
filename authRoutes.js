@@ -8,7 +8,6 @@ const urlencodedParser = bodyParser.urlencoded({extended: true});
 
 passport.use(new LocalStrategy( {usernameField: 'zID'},
   function(username, password, done) {
-    console.log("hi");
     db.user.findOne({ zID: username },function (err, user) {
       if (err) { return done(err); }
       if (!user) { return done(null, false); }
@@ -18,22 +17,36 @@ passport.use(new LocalStrategy( {usernameField: 'zID'},
   }
 ));
 
-passport.serializeUser((user,cb) => {
+passport.serializeUser((user, cb) => {
     cb(null, user.id);
 });
 
+passport.deserializeUser((id,cb) => {
+    db.user.findOne({id:id}, (err, user) => {
+        if (err) {return cb(err);}
+        cb(null, user);
+    });
+});
+
 router.use(passport.initialize());
-router.use(passport.session());
 
 router.post('/login', passport.authenticate('local', {
-    failureRedirect:'/student'
+    failureRedirect:'/student-fail'
     }), (req,res) => {
-    res.send("hi");
+    res.send(req.user);
 });
 
 router.post('/signup', urlencodedParser, (req,res) => {
-    res.send(req.body);
-})
+    const newUser = new db.user({
+        firstname: req.body.firstname,
+        lastname: req.body.lastname,
+        zID: req.body.zID,
+        password: req.body.password,
+        email: req.body.email
+    });
+
+    newUser.save().then(res.render('login',{user:newUser}));
+});
 
 
 

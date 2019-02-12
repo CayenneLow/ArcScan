@@ -37,15 +37,11 @@ module.exports = function(app) {
         res.render('index');
     });
 
+    // student routes
     app.get('/student', (req,res) => {
-        res.render('login');
+        let emptyUser = {zID: "", password:""};
+        res.render('login', {user:emptyUser});
     });
-    
-    app.get('/signup', (req,res) => {
-        res.render('signup');
-    });
-
-    app.use('/auth', authRoutes);
 
     app.post('/student', urlencodedParser, (req, res) => {
         let inputCode = req.body.inputCode;
@@ -58,6 +54,17 @@ module.exports = function(app) {
             }
         })
     });
+
+    app.get('/student-fail', (req, res) => {
+        res.render('student-fail');
+    });
+    ////////////////////
+
+    app.get('/signup', (req,res) => {
+        res.render('signup');
+    });
+
+    app.use('/auth', authRoutes);
 
     app.get('/organization', (req,res) => {
         // find all events
