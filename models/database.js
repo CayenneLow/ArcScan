@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 require('mongoose-type-email');
 
 const userSchema = new mongoose.Schema({
+    type: String,
     firstname: String,
     lastname: String,
     zID: Number,
@@ -10,6 +11,7 @@ const userSchema = new mongoose.Schema({
 })
 
 const orgSchema = new mongoose.Schema({
+    type: String,
     name: String,
     username: String,
     password: String,
@@ -17,6 +19,7 @@ const orgSchema = new mongoose.Schema({
 })
 
 const eventSchema = new mongoose.Schema({
+    type: String,
     name: String,
     date: Date,
     code: Number,

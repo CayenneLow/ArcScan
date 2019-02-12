@@ -20,7 +20,15 @@ const org = database.org;
 module.exports = function(app) {
     app.get('/', (req, res) => {
         console.log("Currently logged in: " + req.user);
-        res.render('index');
+        if (req.user) {
+            if (req.user.type === "org") {
+                res.redirect('/organization');
+            } else if (req.user.type === "user") {
+                res.redirect('/student');
+            }
+        } else {
+            res.render('index');
+        }
     });
 
     app.get('/login', (req, res) => {
@@ -35,7 +43,7 @@ module.exports = function(app) {
 
     // student routes
     app.get('/student', (req,res) => {
-        res.render('student', {found:true});
+        res.render('student', {found:true, user:req.user});
     });
 
     app.post('/student', urlencodedParser, (req, res) => {
@@ -48,7 +56,7 @@ module.exports = function(app) {
                 .then(()=>console.log("Signed Up"),(reject)=>console.log(reject));
                 res.render('student-success', {event:result.name});
             } else {
-                res.render('student', {found: false});
+                res.render('student', {found: false, user: req.user});
             }
         });
     });
@@ -69,6 +77,7 @@ module.exports = function(app) {
     app.use('/auth', authRoutes);
 
     app.get('/organization', (req,res) => {
+        // temporary solution
         // find all events
         let t0 = Date.now();
         let eventArray = [];
@@ -81,11 +90,10 @@ module.exports = function(app) {
             } else {
                 eventArray = [];
             }
-            res.render('organization', {events:eventArray});
+            res.render('organization', {events:eventArray, user:req.user});
         });
         let t1 = Date.now();
         console.log(`${t1-t0} milliseconds`);
-        //construct new array after filtered
 
         /*
         event.find({org: {_id:orgID}}).then((events) => {
@@ -127,6 +135,7 @@ module.exports = function(app) {
         }).then((newCode) => {
             // creates new Event and pushes to database
             let newEvent = new event({
+                type: "event",
                 name: req.body.name,
                 date: Date(),
                 code: newCode,

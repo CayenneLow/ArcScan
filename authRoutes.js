@@ -53,6 +53,7 @@ router.post('/login', passport.authenticate('local', {
 
 router.post('/signup', urlencodedParser, (req,res) => {
     const newUser = new db.user({
+        type: "user",
         firstname: req.body.firstname,
         lastname: req.body.lastname,
         zID: req.body.zID,
@@ -72,6 +73,7 @@ router.post('/orglogin', passport.authenticate('local', {
 
 router.post('/orgsignup', urlencodedParser, (req,res) => {
     const newOrg = new db.org({
+        type: "org",
         name: req.body.name,
         username: req.body.username,
         password: req.body.password,

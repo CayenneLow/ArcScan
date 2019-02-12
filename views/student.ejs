@@ -5,9 +5,13 @@
     </head>
     <body>
         <% include partials/nav.ejs %>
-        <p> <a href="/login"> Login </a></p>
+        <% if (user) { %>
+            <p> <a href="/auth/logout"> Log Out </a></p>
+        <% } else {%>
+            <p> <a href="/login"> Login </a></p>
+        <% } %>   
         <p> <a href="/signup"> Sign Up </a></p>
-        <p><h1> Enter Code: </h1></p>
+        <p><h1> Enter Event Code: </h1></p>
         <form id="code" method="POST" action="/student">
             <p><input type="number" name="inputCode"></input>
             <% if (!found) {%> Invalid Code <% } %></p>

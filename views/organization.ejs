@@ -5,7 +5,11 @@
     </head>
     <body>
         <% include partials/nav.ejs %>
-        <p> <a href="/orglogin"> Login </a></p>
+        <% if (user) { %>
+            <p> <a href="/auth/logout"> Log Out </a></p>
+        <% } else {%>
+            <p> <a href="/orglogin"> Login </a></p>
+        <% } %>   
         <p> <a href="/orgsignup"> Sign Up </a></p>
         <p><a href="/createEvent"> Create New Event </a></p>
         <ul>
