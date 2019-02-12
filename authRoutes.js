@@ -7,8 +7,8 @@ const bodyParser = require('body-parser');
 const urlencodedParser = bodyParser.urlencoded({extended: true});
 
 passport.use(new LocalStrategy(
-  function(username, password, done) {
-      if (typeof username === "number") {
+  function(username, password, done) { 
+      if (!isNaN(username)) {
         db.user.findOne({ zID: username },function (err, user) {
           if (err) { return done(err); }
           if (!user) { return done(null, false); }
@@ -16,11 +16,12 @@ passport.use(new LocalStrategy(
           return done(null, user);
           });
       } else {
-          db.org.findOne({username: username}, function (err, org) {
+          console.log("finding organizer...");
+          db.org.findOne({username: username}, function (err, user) {
               if (err) {return done(err); }
-              if (!org) { return done(null, false);}
-              if (org.password != password) { return done(null, false); }
-              return done(null, org);
+              if (!user) { return done(null, false);}
+              if (user.password != password) { return done(null, false); }
+              return done(null, user);
           });
       }
   }
@@ -32,13 +33,23 @@ passport.serializeUser((user, done) => {
 passport.deserializeUser((id,done) => {
     db.user.findById(id, (err, user) => {
         if (err) {return done(err);}
-        done(null, user);
+        else if (!user) {
+            // if no user, look in organizers
+            db.org.findById(id, (err, org) => {
+                if (err) {return done(err)};
+                console.log(org);
+                done(null, org);
+            })
+        } else if (user) {
+            done(null, user);
+        }
     });
 });
 
 router.post('/login', passport.authenticate('local', {
     failureRedirect:'/student-fail'
     }), (req,res) => {
+    console.log("Welcome back " + req.user.firstname);
     res.redirect('/student')
 });
 
@@ -57,7 +68,8 @@ router.post('/signup', urlencodedParser, (req,res) => {
 router.post('/orglogin', passport.authenticate('local', {
     failureRedirect:'/orglogin'
     }), (req,res) => {
-    res.redirect('/organization')
+    console.log(req.user);
+    res.redirect('/organization');
 });
 
 router.post('/orgsignup', urlencodedParser, (req,res) => {

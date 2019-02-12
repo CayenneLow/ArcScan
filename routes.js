@@ -14,26 +14,12 @@ const user = database.user;
 const event = database.event;
 const org = database.org;
 
-const testUser = new user({
-    firstname: 'Khye',
-    lastname: 'Low',
-    password: 'abc',
-    zID: 5173671,
-    email: 'lowkhyeean@gmail.com'
-})
 
-/*
-const newEvent = new event({
-    name: 'Barbeque',
-    date: Date(),
-    signed: newUser
-});
 
-newEvent.save();
-*/
 
 module.exports = function(app) {
     app.get('/', (req, res) => {
+        console.log("Currently logged in: " + req.user);
         res.render('index');
     });
 
@@ -56,12 +42,21 @@ module.exports = function(app) {
         let inputCode = req.body.inputCode;
         // query the event that has the code
         event.findOne({code:inputCode}).then(result => {
+            let signUser = new user({
+                firstname: req.user.firstname,
+                lastname: req.user.lastname,
+                zID: req.user.zID,
+                password: req.user.password,
+                email: req.user.email
+            });
+            event.update({_id:result.id}, {$push : {signed:signUser}});
             if (result != null) {
+                console.log(req.user);
                 res.render('student-success', {event:result.name});
             } else {
                 res.render('student', {found: false});
             }
-        })
+        });
     });
 
     app.get('/student-fail', (req, res) => {
@@ -99,10 +94,12 @@ module.exports = function(app) {
     });
     
     app.get('/createEvent', (req, res) => {
+            console.log(req.user);
         res.render('createEvent');
     });
     
     app.post('/createEvent', urlencodedParser, (req, res) => {
+            console.log(req.user);
         let newCode = randomNumber();
         event.findOne({code:newCode}).then((result) => {
             if (result != null) {
@@ -116,12 +113,18 @@ module.exports = function(app) {
                 return newCode;
             }
         }).then((newCode) => {
+            const signOrg = new org({
+                name: req.user.name,
+                username: req.user.username,
+                password: req.user.password,
+                email: req.user.email
+            })
             // creates new Event and pushes to database
-            const newEvent = new event({
+            let newEvent = new event({
                 name: req.body.name,
                 date: Date(),
                 code: newCode,
-                signed: testUser
+                org: signOrg
             });
 
             newEvent.save();
