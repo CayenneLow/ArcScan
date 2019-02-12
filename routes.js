@@ -45,7 +45,7 @@ module.exports = function(app) {
             if (result != null) {
             // Note for future: the ".then" is essential for update to work
                 event.update({_id:result.id}, {$push : {signed:req.user}})
-                .then(()=>console.log("Logged"),(reject)=>console.log(reject));
+                .then(()=>console.log("Signed Up"),(reject)=>console.log(reject));
                 res.render('student-success', {event:result.name});
             } else {
                 res.render('student', {found: false});
@@ -70,13 +70,33 @@ module.exports = function(app) {
 
     app.get('/organization', (req,res) => {
         // find all events
-        event.find({}).then((events) => {
+        let t0 = Date.now();
+        let eventArray = [];
+        event.find({}).then((events)=> {
+            events.forEach((event) => {
+               eventArray.push(event); 
+            })
+            if (req.user){
+                eventArray = eventArray.filter(event => event.org.id == req.user.id.toString());
+            } else {
+                eventArray = [];
+            }
+            res.render('organization', {events:eventArray});
+        });
+        let t1 = Date.now();
+        console.log(`${t1-t0} milliseconds`);
+        //construct new array after filtered
+
+        /*
+        event.find({org: {_id:orgID}}).then((events) => {
+            console.log(events);
             let eventArray = [];
             events.forEach((event) => {
                 eventArray.push({id: event.id, name: event.name});
             });
             res.render('organization', {events:eventArray});
-        })
+        }, (error) => {console.log(error)});
+        */
     });
 
     app.get('/event/:id', (req,res) => {
@@ -88,12 +108,10 @@ module.exports = function(app) {
     });
     
     app.get('/createEvent', (req, res) => {
-            console.log(req.user);
         res.render('createEvent');
     });
     
     app.post('/createEvent', urlencodedParser, (req, res) => {
-            console.log(req.user);
         let newCode = randomNumber();
         event.findOne({code:newCode}).then((result) => {
             if (result != null) {
@@ -107,21 +125,15 @@ module.exports = function(app) {
                 return newCode;
             }
         }).then((newCode) => {
-            const signOrg = new org({
-                name: req.user.name,
-                username: req.user.username,
-                password: req.user.password,
-                email: req.user.email
-            })
             // creates new Event and pushes to database
             let newEvent = new event({
                 name: req.body.name,
                 date: Date(),
                 code: newCode,
-                org: signOrg
+                org: req.user
             });
 
-            newEvent.save();
+            newEvent.save().then((result) => console.log(result));;
 
             res.redirect('/organization');
         });

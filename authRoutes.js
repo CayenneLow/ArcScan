@@ -16,7 +16,6 @@ passport.use(new LocalStrategy(
           return done(null, user);
           });
       } else {
-          console.log("finding organizer...");
           db.org.findOne({username: username}, function (err, user) {
               if (err) {return done(err); }
               if (!user) { return done(null, false);}
@@ -37,7 +36,6 @@ passport.deserializeUser((id,done) => {
             // if no user, look in organizers
             db.org.findById(id, (err, org) => {
                 if (err) {return done(err)};
-                console.log(org);
                 done(null, org);
             })
         } else if (user) {
