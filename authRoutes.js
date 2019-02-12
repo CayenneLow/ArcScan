@@ -17,23 +17,23 @@ passport.use(new LocalStrategy( {usernameField: 'zID'},
   }
 ));
 
-passport.serializeUser((user, cb) => {
-    cb(null, user.id);
+passport.serializeUser((user, done) => {
+    done(null, user.id);
 });
 
-passport.deserializeUser((id,cb) => {
-    db.user.findOne({id:id}, (err, user) => {
-        if (err) {return cb(err);}
-        cb(null, user);
+passport.deserializeUser((id,done) => {
+    db.user.findById(id, (err, user) => {
+        if (err) {return done(err);}
+        done(null, user);
     });
 });
 
-router.use(passport.initialize());
+//router.use(passport.initialize());
 
 router.post('/login', passport.authenticate('local', {
     failureRedirect:'/student-fail'
     }), (req,res) => {
-    res.send(req.user);
+    res.redirect('/student')
 });
 
 router.post('/signup', urlencodedParser, (req,res) => {
@@ -48,6 +48,9 @@ router.post('/signup', urlencodedParser, (req,res) => {
     newUser.save().then(res.render('login',{user:newUser}));
 });
 
-
+router.get('/logout', (req,res)=> {
+    req.logout();
+    res.redirect('/');
+})
 
 module.exports = router;

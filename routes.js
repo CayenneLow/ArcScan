@@ -37,10 +37,14 @@ module.exports = function(app) {
         res.render('index');
     });
 
-    // student routes
-    app.get('/student', (req,res) => {
+    app.get('/login', (req, res) => {
         let emptyUser = {zID: "", password:""};
         res.render('login', {user:emptyUser});
+    })
+
+    // student routes
+    app.get('/student', (req,res) => {
+        res.render('student', {found:true});
     });
 
     app.post('/student', urlencodedParser, (req, res) => {

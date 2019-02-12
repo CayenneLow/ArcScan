@@ -1,10 +1,11 @@
 const passport = require('passport');
 const express = require('express');
-const app = express();
-//const cookieSession = require('cookie-session');
 const routes = require('./routes.js');
 const key = require('./config/keys');
 const bodyParser = require('body-parser').urlencoded({extended:true});
+const cookieSession = require('cookie-session');
+
+const app = express();
 
 // set up template engine
 app.set('view engine', 'ejs');
@@ -13,12 +14,14 @@ app.set('view engine', 'ejs');
 app.use(bodyParser);
 
 // cookie
-/*
 app.use(cookieSession({
     maxAge: 24 * 60 * 60 * 1000,
-    key: [key.cookieKey.key]
+    keys: key.cookieKey.key
 }));
-*/
+
+// initialize passport
+app.use(passport.initialize());
+app.use(passport.session());
 
 // static files
 app.use(express.static('./public'));
