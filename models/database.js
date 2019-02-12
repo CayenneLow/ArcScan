@@ -11,6 +11,8 @@ const userSchema = new mongoose.Schema({
 
 const orgSchema = new mongoose.Schema({
     name: String,
+    username: String,
+    password: String,
     email: mongoose.SchemaTypes.Email
 })
 

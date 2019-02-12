@@ -5,6 +5,8 @@
     </head>
     <body>
         <% include partials/nav.ejs %>
+        <p> <a href="/orglogin"> Login </a></p>
+        <p> <a href="/orgsignup"> Sign Up </a></p>
         <button onclick="location.href='/createEvent'"> Create New Event </button>
         <ul>
         <% for (let i = 0; i < events.length; i++) { %>

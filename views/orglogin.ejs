@@ -6,7 +6,7 @@
 	</head>
 	<body>
             <% include partials/nav.ejs %>
-            <form method="POST" id="loginForm" action="/auth/login">
+            <form method="POST" id="loginForm" action="/auth/orglogin">
                 <label for="username"><b>Username: </b></label>
                 <input type="text" name="username" value="<%= org.username %>"></input>
                 </br>
@@ -15,6 +15,6 @@
 
                 <input type="submit"></input>
             </form>
-            <p> New Organization? <a href="signup"> Sign Up </a></p>
+            <p> New Organization? <a href="orgsignup"> Sign Up </a></p>
 	</body>
 </html>

@@ -73,11 +73,13 @@ module.exports = function(app) {
         res.render('signup');
     });
 
+    app.get('/orgsignup', (req,res) => {
+        res.render('orgsignup');
+    })
+
     app.use('/auth', authRoutes);
 
     app.get('/organization', (req,res) => {
-        res.redirect('/orglogin');
-        /*
         // find all events
         event.find({}).then((events) => {
             let eventArray = [];
@@ -86,7 +88,6 @@ module.exports = function(app) {
             });
             res.render('organization', {events:eventArray});
         })
-        */
     });
 
     app.get('/event/:id', (req,res) => {

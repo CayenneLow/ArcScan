@@ -8,7 +8,7 @@
             <% include partials/nav.ejs %>
             <form method="POST" id="loginForm" action="/auth/login">
                 <label for="zID"><b>zID: </b></label>
-                <input type="text" name="zID" value="<%= user.zID %>"></input>
+                <input type="text" name="username" value="<%= user.zID %>"></input>
                 </br>
                 <label for="password"><b>Password: </b></label>
                 <input type="password" name="password" value="<%= user.password%>"></input>

@@ -6,17 +6,25 @@ const db = require('./models/database.js');
 const bodyParser = require('body-parser');
 const urlencodedParser = bodyParser.urlencoded({extended: true});
 
-passport.use(new LocalStrategy( {usernameField: 'zID'},
+passport.use(new LocalStrategy(
   function(username, password, done) {
-    db.user.findOne({ zID: username },function (err, user) {
-      if (err) { return done(err); }
-      if (!user) { return done(null, false); }
-      if (user.password != password) { return done(null, false); }
-      return done(null, user);
-    });
+      if (typeof username === "number") {
+        db.user.findOne({ zID: username },function (err, user) {
+          if (err) { return done(err); }
+          if (!user) { return done(null, false); }
+          if (user.password != password) { return done(null, false); }
+          return done(null, user);
+          });
+      } else {
+          db.org.findOne({username: username}, function (err, org) {
+              if (err) {return done(err); }
+              if (!org) { return done(null, false);}
+              if (org.password != password) { return done(null, false); }
+              return done(null, org);
+          });
+      }
   }
 ));
-
 passport.serializeUser((user, done) => {
     done(null, user.id);
 });
@@ -44,6 +52,23 @@ router.post('/signup', urlencodedParser, (req,res) => {
     });
 
     newUser.save().then(res.render('login',{user:newUser}));
+});
+
+router.post('/orglogin', passport.authenticate('local', {
+    failureRedirect:'/orglogin'
+    }), (req,res) => {
+    res.redirect('/organization')
+});
+
+router.post('/orgsignup', urlencodedParser, (req,res) => {
+    const newOrg = new db.org({
+        name: req.body.name,
+        username: req.body.username,
+        password: req.body.password,
+        email: req.body.email
+    });
+
+    newOrg.save().then(res.render('orglogin',{org:newOrg}));
 });
 
 router.get('/logout', (req,res)=> {
