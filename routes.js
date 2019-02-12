@@ -42,6 +42,11 @@ module.exports = function(app) {
         res.render('login', {user:emptyUser});
     })
 
+    app.get('/orglogin', (req,res) => {
+        let emptyOrg = {username: "", password:""};
+        res.render('orglogin', {org:emptyOrg});
+    })
+
     // student routes
     app.get('/student', (req,res) => {
         res.render('student', {found:true});
@@ -71,6 +76,8 @@ module.exports = function(app) {
     app.use('/auth', authRoutes);
 
     app.get('/organization', (req,res) => {
+        res.redirect('/orglogin');
+        /*
         // find all events
         event.find({}).then((events) => {
             let eventArray = [];
@@ -79,6 +86,7 @@ module.exports = function(app) {
             });
             res.render('organization', {events:eventArray});
         })
+        */
     });
 
     app.get('/event/:id', (req,res) => {

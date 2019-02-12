@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+	<head>
+        <meta charset="utf-8" />
+		<title>Organization Login</title>
+	</head>
+	<body>
+            <% include partials/nav.ejs %>
+            <form method="POST" id="loginForm" action="/auth/login">
+                <label for="username"><b>Username: </b></label>
+                <input type="text" name="username" value="<%= org.username %>"></input>
+                </br>
+                <label for="password"><b>Password: </b></label>
+                <input type="password" name="password" value="<%= org.password%>"></input>
+
+                <input type="submit"></input>
+            </form>
+            <p> New Organization? <a href="signup"> Sign Up </a></p>
+	</body>
+</html>

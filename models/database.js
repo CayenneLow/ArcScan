@@ -18,6 +18,7 @@ const eventSchema = new mongoose.Schema({
     name: String,
     date: Date,
     code: Number,
+    org: orgSchema,
     signed: [userSchema]
 })
 

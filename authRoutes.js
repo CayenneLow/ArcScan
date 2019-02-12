@@ -28,8 +28,6 @@ passport.deserializeUser((id,done) => {
     });
 });
 
-//router.use(passport.initialize());
-
 router.post('/login', passport.authenticate('local', {
     failureRedirect:'/student-fail'
     }), (req,res) => {
