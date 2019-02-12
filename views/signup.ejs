@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+	<head>
+        <meta charset="utf-8" />
+		<title>Login</title>
+	</head>
+	<body>
+            <% include partials/nav.ejs %>
+            <form method="POST" id="signupForm" action="/auth/signup">
+                <label for="firstname"><b>First Name: </b></label>
+                <input type="text" name="firstname"></input>
+                </br>
+                <label for="lastname"><b>Last Name: </b></label>
+                <input type="text" name="lastname"></input>
+                </br>
+                <label for="zID"><b>zID: </b></label>
+                <input type="text" name="zID"></input>
+                </br>
+                <label for="password"><b>Password: </b></label>
+                <input type="password" name="password"></input>
+
+                <input type="submit"></input>
+            </form>
+            <p> Already have an account? <a href="student"> Login </a></p>
+	</body>
+</html>

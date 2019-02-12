@@ -1,10 +1,13 @@
-var bodyParser = require('body-parser');
-var {randomNumber} = require('./RNG.js');
-var urlencodedParser = bodyParser.urlencoded({extended: false});
+const bodyParser = require('body-parser');
+const {randomNumber} = require('./RNG.js');
+const urlencodedParser = bodyParser.urlencoded({extended: true});
+const key = require('./config/keys.js');
+const authRoutes = require('./authRoutes.js');
+
 
 // database
 var mongoose = require('mongoose');
-mongoose.connect('mongodb://admin:Admin123@ds331135.mlab.com:31135/arcscan',{useNewUrlParser:true});
+mongoose.connect(`mongodb://${key.mongodb.username}:${key.mongodb.password}@ds331135.mlab.com:31135/arcscan`,{useNewUrlParser:true});
 // models
 const database = require('./models/database.js'); 
 const user = database.user;
@@ -14,6 +17,7 @@ const org = database.org;
 const testUser = new user({
     firstname: 'Khye',
     lastname: 'Low',
+    password: 'abc',
     zID: 5173671,
     email: 'lowkhyeean@gmail.com'
 })
@@ -34,9 +38,15 @@ module.exports = function(app) {
     });
 
     app.get('/student', (req,res) => {
-        res.render('student', {found:true});
+        res.render('login');
     });
     
+    app.get('/signup', (req,res) => {
+        res.render('signup');
+    });
+
+    app.use('/auth', authRoutes);
+
     app.post('/student', urlencodedParser, (req, res) => {
         let inputCode = req.body.inputCode;
         // query the event that has the code
@@ -56,7 +66,6 @@ module.exports = function(app) {
             events.forEach((event) => {
                 eventArray.push({id: event.id, name: event.name});
             });
-            console.log(eventArray)
             res.render('organization', {events:eventArray});
         })
     });
