@@ -42,16 +42,10 @@ module.exports = function(app) {
         let inputCode = req.body.inputCode;
         // query the event that has the code
         event.findOne({code:inputCode}).then(result => {
-            let signUser = new user({
-                firstname: req.user.firstname,
-                lastname: req.user.lastname,
-                zID: req.user.zID,
-                password: req.user.password,
-                email: req.user.email
-            });
-            event.update({_id:result.id}, {$push : {signed:signUser}});
             if (result != null) {
-                console.log(req.user);
+            // Note for future: the ".then" is essential for update to work
+                event.update({_id:result.id}, {$push : {signed:req.user}})
+                .then(()=>console.log("Logged"),(reject)=>console.log(reject));
                 res.render('student-success', {event:result.name});
             } else {
                 res.render('student', {found: false});
