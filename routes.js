@@ -68,7 +68,11 @@ module.exports = function(app) {
     ////////////////////
 
     app.get('/signup', (req,res) => {
-        res.render('signup', {error: false});
+        let error = false;
+        if (req.query.error) {
+            error = true;
+        }
+        res.render('signup', {error: error});
     });
 
     app.get('/orgsignup', (req,res) => {

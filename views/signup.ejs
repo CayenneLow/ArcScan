@@ -8,19 +8,22 @@
             <% include partials/nav.ejs %>
             <form method="POST" id="signupForm" action="/auth/signup">
                 <label for="firstname"><b>First Name: </b></label>
-                <input type="text" name="firstname"></input>
+                <input type="text" name="firstname" required pattern="[A-Za-z ]{1,32}"></input>
                 </br>
                 <label for="lastname"><b>Last Name: </b></label>
-                <input type="text" name="lastname"></input>
+                <input type="text" name="lastname" required pattern="[A-Za-z ]{1,32}"></input>
                 </br>
                 <label for="zID"><b>zID: </b></label>
-                <input type="text" name="zID"></input>
+                <input type="text" name="zID" required pattern="[0-9]{7}"
+                oninvalid="setCustomValidity('Enter your 7 digit zID (only numbers)')" 
+                oninput="setCustomValidity('')"
+                ></input>
                 </br>
                 <label for="password"><b>Password: </b></label>
-                <input type="password" name="password"></input>
+                <input type="password" name="password" required></input>
                 </br>
                 <label for="email"><b>Email: </b></label>
-                <input type="text" name="email"></input>
+                <input type="email" name="email" required></input>
 
                 <input type="submit"></input>
             </form>

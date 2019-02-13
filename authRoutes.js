@@ -63,9 +63,13 @@ router.post('/signup', urlencodedParser, (req,res) => {
     
     db.user.findOne({zID:newUser.zID}).then((result)=>{
         if (result) {
-            res.render('signup', {error:true});
+            res.redirect('/signup/?error=true');
         } else {
-            newUser.save().then(res.render('login',{client:req.user}));
+            newUser.save().then(() => res.render('login',{client:req.user}),
+                                (error) => {
+                                    console.log(error);
+                                    res.redirect('/signup');
+                                });
         }
     })
 
