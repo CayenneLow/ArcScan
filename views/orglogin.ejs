@@ -11,10 +11,10 @@
             <% include partials/nav.ejs %>
             <form method="POST" id="loginForm" action="/auth/orglogin">
                 <label for="username"><b>Username: </b></label>
-                <input type="text" name="username"></input>
+                <input type="text" name="username" required></input>
                 </br>
                 <label for="password"><b>Password: </b></label>
-                <input type="password" name="password"></input>
+                <input type="password" name="password" required></input>
 
                 <input type="submit"></input>
             </form>
