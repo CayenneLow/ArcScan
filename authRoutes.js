@@ -61,7 +61,7 @@ router.post('/signup', urlencodedParser, (req,res) => {
         email: req.body.email
     });
 
-    newUser.save().then(res.render('login',{user:newUser}));
+    newUser.save().then(res.render('login',{client:req.user}));
 });
 
 router.post('/orglogin', passport.authenticate('local', {
@@ -80,7 +80,7 @@ router.post('/orgsignup', urlencodedParser, (req,res) => {
         email: req.body.email
     });
 
-    newOrg.save().then(res.render('orglogin',{org:newOrg}));
+    newOrg.save().then(res.render('orglogin',{client:req.user}));
 });
 
 router.get('/logout', (req,res)=> {

@@ -8,14 +8,14 @@
             <% include partials/nav.ejs %>
             <form method="POST" id="loginForm" action="/auth/login">
                 <label for="zID"><b>zID: </b></label>
-                <input type="text" name="zID"></input>
+                <input type="text" name="username"></input>
                 </br>
                 <label for="password"><b>Password: </b></label>
                 <input type="password" name="password"></input>
 
                 <input type="submit"></input>
-                <p> Incorrect username/password </p>
             </form>
+                <p> Incorrect username/password </p>
             <p> New User? <a href="signup"> Sign Up </a></p>
 	</body>
 </html>

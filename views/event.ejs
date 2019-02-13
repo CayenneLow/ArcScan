@@ -8,5 +8,28 @@
             <% include partials/nav.ejs %>
             <h1> <%= event.name %> Event</h1>
             <h1> Code: <%= event.code %> </h1>
+
+            <table>
+                <tr>
+                    <strong>
+                    <td> First Name </td>
+                    <td> Last Name </td>
+                    <td> zID </td>
+                    <td> Email </td>
+                    </strong>
+                </tr>
+                <% for(let i = 0; i < users.length; i++) { %>
+                <tr>
+                    <td> <%= users[i].firstname %> </td>
+                    <td> <%= users[i].lastname %> </td>
+                    <td> <%= users[i].zID %> </td>
+                    <td> <%= users[i].email %> </td>
+                </tr>
+                <% } %>
+            </table>
 	</body>
+
+        <script type="text/javascript">
+            setTimeout(()=>location='', 3000);
+        </script>
 </html>

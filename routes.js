@@ -117,8 +117,14 @@ module.exports = function(app) {
         // need name and code
         event.findOne({_id: req.params.id.toString()}).then((result) => {
             let currEvent = {name:result.name, code:result.code};
-            res.render('event', {event:currEvent});
-        })
+            console.log(result);
+            let signedUsers = [];
+            result.signed.forEach((user) => {
+                signedUsers.push(user);
+            });
+            console.log(signedUsers);
+            res.render('event', {event:currEvent, users:signedUsers});
+        });
     });
     
     app.get('/createEvent', (req, res) => {
