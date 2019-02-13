@@ -80,6 +80,7 @@ module.exports = function(app) {
 
     app.get('/organization', (req,res) => {
         if (req.user && req.user.type === 'org'){
+            /*
             // temporary solution
             // find all events
             let t0 = Date.now();
@@ -97,9 +98,9 @@ module.exports = function(app) {
             });
             let t1 = Date.now();
             console.log(`${t1-t0} milliseconds`);
+            */
 
-            /*
-            event.find({org: {_id:orgID}}).then((events) => {
+            event.find({org.id:req.user.id}).then((events) => {
                 console.log(events);
                 let eventArray = [];
                 events.forEach((event) => {
@@ -107,7 +108,6 @@ module.exports = function(app) {
                 });
                 res.render('organization', {events:eventArray});
             }, (error) => {console.log(error)});
-            */
         } else {
             res.redirect('orglogin');
         }
