@@ -7,17 +7,13 @@ const authRoutes = require('./routes/authRoutes.js');
 const stuRoutes = require('./routes/stuRoutes.js');
 const orgRoutes = require('./routes/orgRoutes.js');
 
-// database
+// database connection
 var mongoose = require('mongoose');
 mongoose.connect(`mongodb://${key.mongodb.username}:${key.mongodb.password}@ds331135.mlab.com:31135/arcscan`,{useNewUrlParser:true});
-// models
-const database = require('./models/database.js'); 
-const user = database.user;
-const event = database.event;
-const org = database.org;
 
 module.exports = function(app) {
     app.get('/', (req, res) => { console.log("Currently logged in: " + req.user); 
+        // redirects based on who's logged in
         if (req.user) { 
             if (req.user.type === "org") {
                 res.redirect('/org/dashboard');
