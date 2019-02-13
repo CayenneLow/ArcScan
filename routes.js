@@ -32,18 +32,20 @@ module.exports = function(app) {
     });
 
     app.get('/login', (req, res) => {
-        let emptyUser = {zID: "", password:""};
-        res.render('login', {user:emptyUser});
+        res.render('login', {client:req.user});
     })
 
     app.get('/orglogin', (req,res) => {
-        let emptyOrg = {username: "", password:""};
-        res.render('orglogin', {org:emptyOrg});
+        res.render('orglogin', {client:req.user});
     })
 
     // student routes
     app.get('/student', (req,res) => {
-        res.render('student', {found:true, user:req.user});
+        if (req.user && req.user.type === 'user'){
+            res.render('student', {found:true, user:req.user});
+        } else {
+            res.redirect('/login/');
+        }
     });
 
     app.post('/student', urlencodedParser, (req, res) => {
@@ -77,34 +79,38 @@ module.exports = function(app) {
     app.use('/auth', authRoutes);
 
     app.get('/organization', (req,res) => {
-        // temporary solution
-        // find all events
-        let t0 = Date.now();
-        let eventArray = [];
-        event.find({}).then((events)=> {
-            events.forEach((event) => {
-               eventArray.push(event); 
-            })
-            if (req.user){
-                eventArray = eventArray.filter(event => event.org.id == req.user.id.toString());
-            } else {
-                eventArray = [];
-            }
-            res.render('organization', {events:eventArray, user:req.user});
-        });
-        let t1 = Date.now();
-        console.log(`${t1-t0} milliseconds`);
-
-        /*
-        event.find({org: {_id:orgID}}).then((events) => {
-            console.log(events);
+        if (req.user && req.user.type === 'org'){
+            // temporary solution
+            // find all events
+            let t0 = Date.now();
             let eventArray = [];
-            events.forEach((event) => {
-                eventArray.push({id: event.id, name: event.name});
+            event.find({}).then((events)=> {
+                events.forEach((event) => {
+                   eventArray.push(event); 
+                })
+                if (req.user){
+                    eventArray = eventArray.filter(event => event.org.id == req.user.id.toString());
+                } else {
+                    eventArray = [];
+                }
+                res.render('organization', {events:eventArray, user:req.user});
             });
-            res.render('organization', {events:eventArray});
-        }, (error) => {console.log(error)});
-        */
+            let t1 = Date.now();
+            console.log(`${t1-t0} milliseconds`);
+
+            /*
+            event.find({org: {_id:orgID}}).then((events) => {
+                console.log(events);
+                let eventArray = [];
+                events.forEach((event) => {
+                    eventArray.push({id: event.id, name: event.name});
+                });
+                res.render('organization', {events:eventArray});
+            }, (error) => {console.log(error)});
+            */
+        } else {
+            res.redirect('orglogin');
+        }
     });
 
     app.get('/event/:id', (req,res) => {
