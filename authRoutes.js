@@ -60,8 +60,15 @@ router.post('/signup', urlencodedParser, (req,res) => {
         password: req.body.password,
         email: req.body.email
     });
+    
+    db.user.findOne({zID:newUser.zID}).then((result)=>{
+        if (result) {
+            res.render('signup', {error:true});
+        } else {
+            newUser.save().then(res.render('login',{client:req.user}));
+        }
+    })
 
-    newUser.save().then(res.render('login',{client:req.user}));
 });
 
 router.post('/orglogin', passport.authenticate('local', {

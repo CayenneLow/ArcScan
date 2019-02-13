@@ -18,9 +18,8 @@ const org = database.org;
 
 
 module.exports = function(app) {
-    app.get('/', (req, res) => {
-        console.log("Currently logged in: " + req.user);
-        if (req.user) {
+    app.get('/', (req, res) => { console.log("Currently logged in: " + req.user); 
+        if (req.user) { 
             if (req.user.type === "org") {
                 res.redirect('/organization');
             } else if (req.user.type === "user") {
@@ -69,7 +68,7 @@ module.exports = function(app) {
     ////////////////////
 
     app.get('/signup', (req,res) => {
-        res.render('signup');
+        res.render('signup', {error: false});
     });
 
     app.get('/orgsignup', (req,res) => {
