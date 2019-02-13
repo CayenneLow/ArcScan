@@ -6,7 +6,7 @@
 	</head>
 	<body>
             <% include partials/nav.ejs %>
-            <form method="POST" id="signupForm" action="/auth/signup">
+            <form method="POST" id="signupForm" action="/auth/stuSignUp">
                 <label for="firstname"><b>First Name: </b></label>
                 <input type="text" name="firstname" required pattern="[A-Za-z ]{1,32}"></input>
                 </br>
@@ -30,6 +30,6 @@
             <% if (error === true) { %>
                 <p> zID already registered </p>
             <% } %>
-            <p> Already have an account? <a href="/login"> Login </a></p>
+            <p> Already have an account? <a href="/student/stuLogin"> Login </a></p>
 	</body>
 </html>

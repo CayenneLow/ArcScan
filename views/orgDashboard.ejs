@@ -8,13 +8,12 @@
         <% if (user) { %>
             <p> <a href="/auth/logout"> Log Out </a></p>
         <% } else {%>
-            <p> <a href="/orglogin"> Login </a></p>
+            <p> <a href="/org/orgLogin"> Login </a></p>
         <% } %>   
-        <p> <a href="/orgsignup"> Sign Up </a></p>
-        <p><a href="/createEvent"> Create New Event </a></p>
+        <p><a href="/org/event/createEvent"> Create New Event </a></p>
         <ul>
         <% for (let i = 0; i < events.length; i++) { %>
-        <li><a href="/event/<%= events[i].id %>"><%= events[i].name %></a></li>
+        <li><a href="/org/event/id/<%= events[i].id %>"><%= events[i].name %></a></li>
         <% } %>
         </ul>
     </body>

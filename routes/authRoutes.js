@@ -1,8 +1,5 @@
 const router = require('express').Router();
-const passport = require('passport');
-const LocalStrategy = require('passport-local').Strategy;
-const db = require('./models/database.js');
-
+const passport = require('passport'); const LocalStrategy = require('passport-local').Strategy; const db = require('../models/database.js'); 
 const bodyParser = require('body-parser');
 const urlencodedParser = bodyParser.urlencoded({extended: true});
 
@@ -44,14 +41,14 @@ passport.deserializeUser((id,done) => {
     });
 });
 
-router.post('/login', passport.authenticate('local', {
-    failureRedirect:'/student-fail'
+router.post('/stuLogin', passport.authenticate('local', {
+    failureRedirect:'/student/student-fail'
     }), (req,res) => {
     console.log("Welcome back " + req.user.firstname);
-    res.redirect('/student')
+    res.redirect('/student/input')
 });
 
-router.post('/signup', urlencodedParser, (req,res) => {
+router.post('/stuSignUp', urlencodedParser, (req,res) => {
     const newUser = new db.user({
         type: "user",
         firstname: req.body.firstname,
@@ -63,26 +60,26 @@ router.post('/signup', urlencodedParser, (req,res) => {
     
     db.user.findOne({zID:newUser.zID}).then((result)=>{
         if (result) {
-            res.redirect('/signup/?error=true');
+            res.redirect('/student/stuSignUp/?error=true');
         } else {
-            newUser.save().then(() => res.render('login',{client:req.user}),
+            newUser.save().then(() => res.render('studentLogin',{client:req.user}),
                                 (error) => {
                                     console.log(error);
-                                    res.redirect('/signup');
+                                    res.redirect('/student/stuSignUp');
                                 });
         }
     })
 
 });
 
-router.post('/orglogin', passport.authenticate('local', {
-    failureRedirect:'/orglogin'
+router.post('/orgLogin', passport.authenticate('local', {
+    failureRedirect:'/orgLogin'
     }), (req,res) => {
     console.log(req.user);
-    res.redirect('/organization');
+    res.redirect('/org/dashboard');
 });
 
-router.post('/orgsignup', urlencodedParser, (req,res) => {
+router.post('/orgSignUp', urlencodedParser, (req,res) => {
     const newOrg = new db.org({
         type: "org",
         name: req.body.name,
@@ -91,7 +88,7 @@ router.post('/orgsignup', urlencodedParser, (req,res) => {
         email: req.body.email
     });
 
-    newOrg.save().then(res.render('orglogin',{client:req.user}));
+    newOrg.save().then(res.render('orgLogin',{client:req.user}));
 });
 
 router.get('/logout', (req,res)=> {

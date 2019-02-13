@@ -6,7 +6,7 @@
 	</head>
 	<body>
             <% include partials/nav.ejs %>
-            <form method="POST" id="loginForm" action="/auth/login">
+            <form method="POST" id="loginForm" action="/auth/stuLogin">
                 <label for="zID"><b>zID: </b></label>
                 <input type="text" name="username"></input>
                 </br>
@@ -16,6 +16,6 @@
                 <input type="submit"></input>
             </form>
                 <p> Incorrect username/password </p>
-            <p> New User? <a href="signup"> Sign Up </a></p>
+            <p> New User? <a href="/student/stuSignUp"> Sign Up </a></p>
 	</body>
 </html>

@@ -9,7 +9,7 @@
 	</head>
 	<body>
             <% include partials/nav.ejs %>
-            <form method="POST" id="loginForm" action="/auth/login">
+            <form method="POST" id="loginForm" action="/auth/stuLogin">
                 <label for="username"><b>zID: </b></label>
                 <input type="text" name="username" required pattern="[0-9]{7}"
                 oninvalid="setCustomValidity('Enter your 7 digit zID (only numbers)')" 
@@ -21,6 +21,6 @@
 
                 <input type="submit"></input>
             </form>
-            <p> New User? <a href="/signup"> Sign Up </a></p>
+            <p> New User? <a href="/student/stuSignUp"> Sign Up </a></p>
 	</body>
 </html>
