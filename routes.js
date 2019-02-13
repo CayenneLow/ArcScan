@@ -114,17 +114,19 @@ module.exports = function(app) {
     });
 
     app.get('/event/:id', (req,res) => {
-        // need name and code
-        event.findOne({_id: req.params.id.toString()}).then((result) => {
-            let currEvent = {name:result.name, code:result.code};
-            console.log(result);
-            let signedUsers = [];
-            result.signed.forEach((user) => {
-                signedUsers.push(user);
+        if (!req.user || req.user.type === 'user') {
+            res.redirect('/');
+        } else {
+            // need name and code
+            event.findOne({_id: req.params.id.toString()}).then((result) => {
+                let currEvent = {name:result.name, code:result.code};
+                let signedUsers = [];
+                result.signed.forEach((user) => {
+                    signedUsers.push(user);
+                });
+                res.render('event', {event:currEvent, users:signedUsers});
             });
-            console.log(signedUsers);
-            res.render('event', {event:currEvent, users:signedUsers});
-        });
+        }
     });
     
     app.get('/createEvent', (req, res) => {
