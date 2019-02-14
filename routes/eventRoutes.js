@@ -1,7 +1,7 @@
 const router = require('express').Router();
 const bodyParser = require('body-parser');
 const urlencodedParser = bodyParser.urlencoded({extended: true});
-let {randomNumber} = require('../RNG.js')
+let randomNumber = require('../RNG.js')
 
 // Database
 const db = require('../models/database.js');

@@ -20,6 +20,7 @@
             <% include partials/nav.ejs %>
             <h1> <%= event.name %> Event</h1>
             <h1> Code: <%= event.code %> </h1>
+            <button onclick="refresh()">Refresh List </button>
 
             <table id="signed" class="display nowrap" style="width:100%">
                 <thead>
@@ -44,7 +45,9 @@
 	</body>
 
         <script type="text/javascript">
-            setTimeout(()=>location='', 3000);
+            function refresh() {
+                location='';
+            }
             $(document).ready(function() {
                 $('#signed').DataTable( {
                     dom: 'Bfrtip',
