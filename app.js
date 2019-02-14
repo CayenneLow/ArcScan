@@ -1,6 +1,6 @@
 const passport = require('passport');
 const express = require('express');
-const routes = require('./routes.js');
+const routes = require('./mainRoutes.js');
 const key = require('./config/keys');
 const bodyParser = require('body-parser').urlencoded({extended:true});
 const cookieSession = require('cookie-session');
