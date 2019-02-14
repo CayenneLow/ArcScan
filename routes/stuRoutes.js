@@ -17,8 +17,14 @@ router.get('/stuSignUp', (req,res) => {
 });
 
 router.get('/input', (req,res) => {
+    // make sure only logged in users can access
     if (req.user && req.user.type === 'user'){
-        res.render('studentInput', {found:true, user:req.user});
+        let passIn = {
+            event: req.query.event,
+            found: req.query.found,
+            user:req.user
+        };
+        res.render('studentInput', passIn);
     } else {
         res.redirect('/student/stuLogin');
     }
@@ -32,9 +38,9 @@ router.post('/input', urlencodedParser, (req, res) => {
         // Note for future: the ".then" is essential for update to work
             event.update({_id:result.id}, {$push : {signed:req.user}})
             .then(()=>console.log("Signed Up"),(reject)=>console.log(reject));
-            res.render('student-success', {event:result.name});
+            res.redirect('/student/input?found=true&event=' + result.name);
         } else {
-            res.render('studentInput', {found: false, user: req.user});
+            res.redirect('/student/input?found=false&event=false');
         }
     });
 });

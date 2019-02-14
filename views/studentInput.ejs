@@ -13,8 +13,13 @@
         <p><h1> Enter Event Code: </h1></p>
         <form id="code" method="POST" action="/student/input">
             <p><input type="number" name="inputCode"></input>
-            <% if (!found) {%> Invalid Code <% } %></p>
             <input type="submit"></input>
+            <% if (found == 'false') {%> 
+                <p>Invalid Code </p>
+            <% } else if (event != 'false') { %></p>
+                <p>Successfully signed up to <%= event %></p>
+            <% } %>
+                
         </form>
     </body>
 </html>

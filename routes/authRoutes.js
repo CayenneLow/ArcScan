@@ -64,8 +64,7 @@ passport.deserializeUser((id,done) => {
 router.post('/stuLogin', passport.authenticate('local', {
     failureRedirect:'/student/student-fail'
     }), (req,res) => {
-    console.log("Welcome back " + req.user.firstname);
-    res.redirect('/student/input')
+    res.redirect('/student/input?found=true&event=false');
 });
 
 router.post('/stuSignUp', urlencodedParser, (req,res) => {
