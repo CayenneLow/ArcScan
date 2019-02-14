@@ -33,6 +33,19 @@ router.get('/createEvent', (req, res) => {
     res.render('createEvent');
 });
 
+/*
+ { name: 'lol',
+  startDate: '0030-09-12',
+  startTime: '08:59',
+  endDate: '3809-08-09',
+  endTime: '08:09',
+  recurring: 'on',
+  daySelection: 'Tuesday',
+  recurrFrom: '12:12',
+  recurrTo: '09:09' }
+
+ */
+
 router.post('/createEvent', urlencodedParser, (req, res) => {
     console.log(req.body);
     let newCode = randomNumber();
