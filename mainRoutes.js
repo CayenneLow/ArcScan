@@ -18,7 +18,7 @@ module.exports = function(app) {
             if (req.user.type === "org") {
                 res.redirect('/org/dashboard');
             } else if (req.user.type === "user") {
-                res.redirect('/student/input');
+                res.redirect('/student/input?found=true&event=false&duplicate=false');
             }
         } else {
             res.render('index');

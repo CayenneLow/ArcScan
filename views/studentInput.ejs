@@ -16,6 +16,8 @@
             <input type="submit"></input>
             <% if (found == 'false') {%> 
                 <p>Invalid Code </p>
+            <% } else if (duplicate == 'true') { %>
+                <p>You've already signed up to this event!</p>
             <% } else if (event != 'false') { %></p>
                 <p>Successfully signed up to <%= event %></p>
             <% } %>

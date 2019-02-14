@@ -22,6 +22,7 @@ router.get('/input', (req,res) => {
         let passIn = {
             event: req.query.event,
             found: req.query.found,
+            duplicate: req.query.duplicate,
             user:req.user
         };
         res.render('studentInput', passIn);
@@ -35,18 +36,26 @@ router.post('/input', urlencodedParser, (req, res) => {
     // query the event that has the code
     event.findOne({code:inputCode}).then(result => {
         if (result != null) {
-        // Note for future: the ".then" is essential for update to work
-            event.update({_id:result.id}, {$push : {signed:req.user}})
-            .then(()=>console.log("Signed Up"),(reject)=>console.log(reject));
-            res.redirect('/student/input?found=true&event=' + result.name);
+            // check for duplicate signup
+            let comparisonArray = result.signed.map((user) => {
+                // first construct an array of all signed ids
+               return user.id;
+            });
+            comparisonArray = comparisonArray.filter(id => {
+                return id == req.user.id;
+            });
+            if(comparisonArray.length < 1) {
+                // Note for future: the ".then" is essential for update to work
+                event.update({_id:result.id}, {$push : {signed:req.user}})
+                .then(()=>console.log("Signed Up"),(reject)=>console.log(reject));
+                res.redirect('/student/input?found=true&event=' + result.name);
+            } else {
+                res.redirect('/student/input?found=true&event=false&duplicate=true')
+            }
         } else {
-            res.redirect('/student/input?found=false&event=false');
+            res.redirect('/student/input?found=false&event=false&duplicate=true');
         }
     });
-});
-
-router.get('/student-fail', (req, res) => {
-    res.render('student-fail');
 });
 
 module.exports = router;
