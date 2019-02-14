@@ -33,21 +33,7 @@ router.get('/createEvent', (req, res) => {
     res.render('createEvent');
 });
 
-/*
- { name: 'lol',
-  startDate: '0030-09-12',
-  startTime: '08:59',
-  endDate: '3809-08-09',
-  endTime: '08:09',
-  recurring: 'on',
-  daySelection: 'Tuesday',
-  recurrFrom: '12:12',
-  recurrTo: '09:09' }
-
- */
-
 router.post('/createEvent', urlencodedParser, (req, res) => {
-    console.log(req.body);
     let newCode = randomNumber();
     event.findOne({code:newCode}).then((result) => {
         if (result != null) {
@@ -65,12 +51,21 @@ router.post('/createEvent', urlencodedParser, (req, res) => {
         let newEvent = new event({
             type: "event",
             name: req.body.name,
-            date: Date(),
             code: newCode,
-            org: req.user
+            org: req.user,
+            startDate: req.body.startDate,
+            startTime: req.body.startTime,
+            endDate: req.body.endDate,
+            endTime: req.body.endTime,
         });
+        if (req.body.recurring == 'on') {
+            newEvent.recurring = req.body.recurring;
+            newEvent.daySelection = req.body.daySelection;
+            newEvent.recurrFrom = req.body.recurrFrom;
+            newEvent.recurrTo = req.body.recurrTo;
+        }
 
-        newEvent.save();
+        newEvent.save().then(result=>console.log(result));
 
         res.redirect('/org/dashboard');
     });

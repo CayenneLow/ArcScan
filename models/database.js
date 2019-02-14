@@ -21,7 +21,14 @@ const orgSchema = new mongoose.Schema({
 const eventSchema = new mongoose.Schema({
     type: String,
     name: String,
-    date: Date,
+    startDate: Date,
+    startTime: String,
+    endDate: Date,
+    endTime: String,
+    recurring: String,
+    daySelection: String,
+    recurrFrom: String,
+    recurrTo: String,
     code: Number,
     org: orgSchema,
     signed: [userSchema]
