@@ -21,10 +21,8 @@ const orgSchema = new mongoose.Schema({
 const eventSchema = new mongoose.Schema({
     type: String,
     name: String,
-    startDate: Date,
-    startTime: String,
-    endDate: Date,
-    endTime: String,
+    startDateTime: String,
+    endDateTime: String,
     recurring: String,
     daySelection: String,
     recurrFrom: String,
@@ -34,10 +32,16 @@ const eventSchema = new mongoose.Schema({
     signed: [userSchema]
 })
 
+const jobSchema = new mongoose.Schema({
+    name: String,
+})
+
 const user = mongoose.model('user', userSchema);
 const org = mongoose.model('org', orgSchema);
 const event = mongoose.model('event', eventSchema);
+const job = mongoose.model('job', jobSchema);
 
 module.exports.user = user;
 module.exports.org = org;
 module.exports.event = event;
+module.exports.job = job;

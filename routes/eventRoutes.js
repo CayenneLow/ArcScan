@@ -1,7 +1,10 @@
 const router = require('express').Router();
 const bodyParser = require('body-parser');
 const urlencodedParser = bodyParser.urlencoded({extended: true});
-let randomNumber = require('../RNG.js')
+let randomNumber = require('../functions/RNG.js');
+let convertToCron = require('../functions/convertToCron.js');
+let moment = require('moment');
+let schedule = require('node-schedule');
 
 // Database
 const db = require('../models/database.js');
@@ -53,11 +56,12 @@ router.post('/createEvent', urlencodedParser, (req, res) => {
             name: req.body.name,
             code: newCode,
             org: req.user,
-            startDate: req.body.startDate,
-            startTime: req.body.startTime,
-            endDate: req.body.endDate,
-            endTime: req.body.endTime,
+            startDateTime: req.body.startDateTime,
+            endDateTime: req.body.endDateTime,
         });
+        
+
+
         if (req.body.recurring == 'on') {
             newEvent.recurring = req.body.recurring;
             newEvent.daySelection = req.body.daySelection;
@@ -65,7 +69,21 @@ router.post('/createEvent', urlencodedParser, (req, res) => {
             newEvent.recurrTo = req.body.recurrTo;
         }
 
-        newEvent.save().then(result=>console.log(result));
+        newEvent.save().then(result => {
+            // all for scheduling
+            let startDateTime = moment(result.startDateTime).format();
+            let endDateTime = moment(result.endDateTime).format();
+            let cronTime = convertToCron(endDateTime);
+            var j = schedule.scheduleJob({ 
+                start: startDateTime, 
+                end: endDateTime, 
+                rule: cronTime }, function(){
+                // remove event code
+                event.findOneAndUpdate({_id:result.id},{$set: {code:''} }).then(result => {
+                    console.log(`${result.name}'s code has expired'`);
+                })
+            });
+        });
 
         res.redirect('/org/dashboard');
     });
