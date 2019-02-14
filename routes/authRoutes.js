@@ -3,21 +3,42 @@ const passport = require('passport'); const LocalStrategy = require('passport-lo
 const bodyParser = require('body-parser');
 const urlencodedParser = bodyParser.urlencoded({extended: true});
 
+// password encryption
+const bcrypt = require('bcrypt');
+const saltRounds = 10;
+
 passport.use(new LocalStrategy(
   function(username, password, done) { 
       if (!isNaN(username)) {
         db.user.findOne({ zID: username },function (err, user) {
           if (err) { return done(err); }
           if (!user) { return done(null, false); }
-          if (user.password != password) { return done(null, false); }
-          return done(null, user);
+
+          // user.password is the hash from db
+          console.log(user.password);
+          bcrypt.compare(password, user.password).then(function(res) {
+              if (res == false) {
+                return done(null,false);
+              } else {
+                  return done(null, user);
+              }
           });
+
+        });
       } else {
           db.org.findOne({username: username}, function (err, user) {
               if (err) {return done(err); }
               if (!user) { return done(null, false);}
-              if (user.password != password) { return done(null, false); }
-              return done(null, user);
+              
+              // user.password is the hash from db
+              bcrypt.compare(password, user.password).then(function(res) {
+                  if (res == false) {
+                    return done(null,false);
+                  } else {
+                      return done(null, user);
+                  }
+              });
+
           });
       }
   }
@@ -49,27 +70,31 @@ router.post('/stuLogin', passport.authenticate('local', {
 });
 
 router.post('/stuSignUp', urlencodedParser, (req,res) => {
-    const newUser = new db.user({
-        type: "user",
-        firstname: req.body.firstname,
-        lastname: req.body.lastname,
-        zID: req.body.zID,
-        password: req.body.password,
-        email: req.body.email
-    });
-    
-    db.user.findOne({zID:newUser.zID}).then((result)=>{
+
+    db.user.findOne({zID:req.body.zID}).then((result)=>{
         if (result) {
             res.redirect('/student/stuSignUp/?error=true');
         } else {
-            newUser.save().then(() => res.render('studentLogin',{client:req.user}),
-                                (error) => {
-                                    console.log(error);
-                                    res.redirect('/student/stuSignUp');
-                                });
+            console.log(req.body.password);
+            bcrypt.hash(req.body.password, saltRounds).then(hash => {
+                console.log(hash);
+                // store hash in db
+                const newUser = new db.user({
+                    type: "user",
+                    firstname: req.body.firstname,
+                    lastname: req.body.lastname,
+                    zID: req.body.zID,
+                    password: hash,
+                    email: req.body.email
+                });
+                newUser.save().then((success) => res.render('studentLogin',{client:req.user}),
+                                    (error) => {
+                                        console.log(error);
+                                        res.redirect('/student/stuSignUp');
+                                    });
+            });
         }
-    })
-
+    });
 });
 
 router.post('/orgLogin', passport.authenticate('local', {
