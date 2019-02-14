@@ -9,10 +9,19 @@
             <h1>Create Event</h1>
             <form id="create" method="POST" action="/org/event/createEvent">
                 <p><label for="name"> Name of Event: </label>
-                <input type="text" name="name"></input></p>
-                <!-- <p><label for="date"> Date of Event: </label>
-                    <input type="date" name="date"></input></p> -->
+                <input type="text" name="name" required></input></p>
+
+                <p><label for="endDate"> Event Start: </label>
+                <input type="date" name="startDate" required></input>
+                <input type="time" name="startTime" required></input></p>
+                
+                <p><label for="endDate"> Event End: </label>
+                <input type="date" name="endDate" required></input>
+                <input type="time" name="endTime" required></input></p>
+                <input type="checkbox" name="recurring" id="recurring">Recurring Event</input>
+                <div id="recurringDiv"></div>
                 <p><input type="submit"></input></p>
             </form>
 	</body>
+        <script type="text/javascript" src="/createEventScript.js"></script>
 </html>

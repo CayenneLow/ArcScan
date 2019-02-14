@@ -30,6 +30,7 @@ router.get('/createEvent', (req, res) => {
 });
 
 router.post('/createEvent', urlencodedParser, (req, res) => {
+    console.log(req.body);
     let newCode = randomNumber();
     event.findOne({code:newCode}).then((result) => {
         if (result != null) {

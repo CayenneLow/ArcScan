@@ -12,7 +12,10 @@
         <% } %>   
         <p><h1> Enter Event Code: </h1></p>
         <form id="code" method="POST" action="/student/input">
-            <p><input type="number" name="inputCode"></input>
+            <p><input type="text" name="inputCode" required pattern="[0-9]{4}"
+            oninvalid="setCustomValidity('Invalid Code')" 
+            oninput="setCustomValidity('')"
+            ></input></p>
             <input type="submit"></input>
             <% if (found == 'false') {%> 
                 <p>Invalid Code </p>
