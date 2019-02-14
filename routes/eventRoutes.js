@@ -59,4 +59,16 @@ router.post('/createEvent', urlencodedParser, (req, res) => {
     });
 })
 
+router.get('/id/:id/delete', (req,res) => {
+    let eventID = req.params.id;
+    console.log(eventID);
+    event.findOneAndDelete({_id:eventID}).then((result) => {
+        console.log(`deleted ${result}`);
+        res.redirect('/org/dashboard');
+    }, (error) => {
+        console.log(error);
+        res.redirect('/org/dashboard');
+    });
+});
+
 module.exports = router;
