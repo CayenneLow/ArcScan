@@ -15,12 +15,16 @@ router.get('/id/:id', (req,res) => {
     } else {
         // need name and code
         event.findOne({_id: req.params.id.toString()}).then((result) => {
-            let currEvent = {name:result.name, code:result.code};
-            let signedUsers = [];
-            result.signed.forEach((user) => {
-                signedUsers.push(user);
-            });
-            res.render('event', {event:currEvent, users:signedUsers});
+            if (result) {
+                let currEvent = {name:result.name, code:result.code};
+                let signedUsers = [];
+                result.signed.forEach((user) => {
+                    signedUsers.push(user);
+                });
+                res.render('event', {event:currEvent, users:signedUsers});
+            } else {
+                res.redirect('/org/dashboard');
+            }
         });
     }
 });
