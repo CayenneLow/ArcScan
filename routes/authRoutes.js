@@ -15,7 +15,6 @@ passport.use(new LocalStrategy(
           if (!user) { return done(null, false); }
 
           // user.password is the hash from db
-          console.log(user.password);
           bcrypt.compare(password, user.password).then(function(res) {
               if (res == false) {
                 return done(null,false);
@@ -73,47 +72,77 @@ router.post('/stuSignUp', urlencodedParser, (req,res) => {
 
     db.user.findOne({zID:req.body.zID}).then((result)=>{
         if (result) {
-            res.redirect('/student/stuSignUp/?error=true');
+            res.redirect('/student/stuSignUp/?error=zID');
         } else {
-            console.log(req.body.password);
-            bcrypt.hash(req.body.password, saltRounds).then(hash => {
-                console.log(hash);
-                // store hash in db
-                const newUser = new db.user({
-                    type: "user",
-                    firstname: req.body.firstname,
-                    lastname: req.body.lastname,
-                    zID: req.body.zID,
-                    password: hash,
-                    email: req.body.email
-                });
-                newUser.save().then((success) => res.render('studentLogin',{client:req.user}),
-                                    (error) => {
-                                        console.log(error);
-                                        res.redirect('/student/stuSignUp');
-                                    });
-            });
+            db.user.findOne({email:req.body.email}).then((result => {
+                if(result) {
+                    res.redirect('/student/stuSignUp/?error=email');
+                } else {
+                    db.org.findOne({email:req.body.email}).then((result => {
+                        if (result) {
+                            res.redirect('/student/stuSignUp/?error=email');
+                        } else {
+                            bcrypt.hash(req.body.password, saltRounds).then(hash => {
+                                // store hash in db
+                                const newUser = new db.user({
+                                    type: "user",
+                                    firstname: req.body.firstname,
+                                    lastname: req.body.lastname,
+                                    zID: req.body.zID,
+                                    password: hash,
+                                    email: req.body.email
+                                });
+                                newUser.save().then((success) => res.render('studentLogin',{client:req.user}),
+                                                    (error) => {
+                                                        console.log(error);
+                                                        res.redirect('/student/stuSignUp');
+                                                    });
+                            });
+
+                        }
+                    }));
+                }
+            }));
         }
     });
 });
 
 router.post('/orgLogin', passport.authenticate('local', {
-    failureRedirect:'/orgLogin'
-    }), (req,res) => {
-    console.log(req.user);
-    res.redirect('/org/dashboard');
+                           failureRedirect:'/orgLogin'
+                         }), (req,res) => {
+                           res.redirect('/org/dashboard');
 });
 
 router.post('/orgSignUp', urlencodedParser, (req,res) => {
-    const newOrg = new db.org({
-        type: "org",
-        name: req.body.name,
-        username: req.body.username,
-        password: req.body.password,
-        email: req.body.email
+    db.org.findOne({username:req.body.username}).then((result) => {
+        if (result) {
+            res.redirect('/org/orgSignUp/?error=username');
+        } else {
+            db.org.findOne({email:req.body.email}).then((result) => {
+                if (result) {
+                    res.redirect('/org/orgSignUp/?error=email');
+                } else {
+                    db.user.findOne({email:req.body.email}).then((result) => {
+                        if (result) {
+                            res.redirect('/org/orgSignUp/?error=email');
+                        } else {
+                            bcrypt.hash(req.body.password, saltRounds).then(hash => {
+                                const newOrg = new db.org({
+                                    type: "org",
+                                    name: req.body.name,
+                                    username: req.body.username,
+                                    password: hash,
+                                    email: req.body.email
+                                });
+                                newOrg.save().then(res.render('orgLogin',{client:req.user}));
+                            });
+                        }
+                    });
+                }
+            });
+        }
     });
 
-    newOrg.save().then(res.render('orgLogin',{client:req.user}));
 });
 
 router.get('/logout', (req,res)=> {

@@ -21,6 +21,11 @@
 
                 <input type="submit"></input>
             </form>
+            <% if (error === "username") { %>
+                <p> Username already registered </p>
+            <% } else if (error === "email"){%>
+                <p> Email already registered </p>
+            <% } %>
             <p> Already have an account? <a href="student"> Login </a></p>
 	</body>
 </html>

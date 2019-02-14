@@ -13,11 +13,7 @@ router.get('/stuLogin', (req, res) => {
 });
 
 router.get('/stuSignUp', (req,res) => {
-    let error = false;
-    if (req.query.error) {
-        error = true;
-    }
-    res.render('studentSignUp', {error: error});
+    res.render('studentSignUp', {error: req.query.error});
 });
 
 router.get('/input', (req,res) => {

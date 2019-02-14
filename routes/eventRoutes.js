@@ -35,7 +35,7 @@ router.post('/createEvent', urlencodedParser, (req, res) => {
         if (result != null) {
             let bufferCode;
             while(newCode === result.code) {
-                console.log("generating new code...");
+                console.log("Duplicate code: generating new code");
                 bufferCode = randomNumber();
             }
             return bufferCode;
@@ -52,7 +52,7 @@ router.post('/createEvent', urlencodedParser, (req, res) => {
             org: req.user
         });
 
-        newEvent.save().then((result) => console.log(result));;
+        newEvent.save();
 
         res.redirect('/org/dashboard');
     });

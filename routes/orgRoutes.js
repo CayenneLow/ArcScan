@@ -17,7 +17,7 @@ router.get('/orgLogin', (req,res) => {
 
 
 router.get('/orgSignUp', (req,res) => {
-    res.render('orgSignUp');
+    res.render('orgSignUp', {error: req.query.error});
 })
 
 router.get('/dashboard', (req,res) => {
