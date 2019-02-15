@@ -20,7 +20,13 @@
             <% include partials/nav.ejs %>
             <a href="/org/dashboard">Back to dashboard</a>
             <h1> <%= event.name %> Event</h1>
-            <h1> Code: <%= event.code %> </h1>
+            <h1> 
+                <% if (event.code == ' ') { %>
+                Code : <%= event.code %>
+                <% } else { %>
+                Code: Code Expired
+                <% } %>
+            </h1>
             <button onclick="refresh()">Refresh List </button>
 
             <table id="signed" class="display nowrap" style="width:100%">
