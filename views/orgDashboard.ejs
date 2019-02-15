@@ -16,16 +16,21 @@
                 <th> Event Name </th>
                 <th> Actions </th>
             </thead>
-        <% for (let i = 0; i < events.length; i++) { %>
-            <tr>
-                <td>
-                    <a href="/org/event/id/<%= events[i].id %>"><%= events[i].name %></a>
-                </td>
-                <td>
-                    <a href="/org/event/id/<%= events[i].id %>/delete">Delete</a>
-                </td>
-            <tr>
-        <% } %>
+        <% if (events.length == 0) { %>
+            </table>
+            <i> Create your first event! </i>
+        <% } else { %>
+            <% for (let i = 0; i < events.length; i++) { %>
+                <tr>
+                    <td>
+                        <a href="/org/event/id/<%= events[i].id %>"><%= events[i].name %></a>
+                    </td>
+                    <td>
+                        <a href="/org/event/id/<%= events[i].id %>/delete">Delete</a>
+                    </td>
+                <tr>
+        <% }} %>
+
         </table>
         </ul>
     </body>
