@@ -21,10 +21,10 @@
             <a href="/org/dashboard">Back to dashboard</a>
             <h1> <%= event.name %> Event</h1>
             <h1> 
-                <% if (event.code == ' ') { %>
-                Code : <%= event.code %>
-                <% } else { %>
+                <% if (event.code == null) { %>
                 Code: Code Expired
+                <% } else { %>
+                Code : <%= event.code %>
                 <% } %>
             </h1>
             <button onclick="refresh()">Refresh List </button>

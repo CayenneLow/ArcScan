@@ -19,7 +19,10 @@ router.get('/id/:id', (req,res) => {
         // need name and code
         event.findOne({_id: req.params.id.toString()}).then((result) => {
             if (result) {
-                let currEvent = {name:result.name, code:result.code};
+                let currEvent = {
+                    name:result.name, 
+                    code:result.code
+                };
                 let signedUsers = [];
                 result.signed.forEach((user) => {
                     signedUsers.push(user);
@@ -59,8 +62,6 @@ router.post('/createEvent', urlencodedParser, (req, res) => {
             startDateTime: req.body.startDateTime,
             endDateTime: req.body.endDateTime,
         });
-        
-
 
         if (req.body.recurring == 'on') {
             newEvent.recurring = req.body.recurring;
@@ -80,7 +81,7 @@ router.post('/createEvent', urlencodedParser, (req, res) => {
                 rule: cronTime }, function(){
                 // remove event code
                 event.findOneAndUpdate({_id:result.id},{$set: {code:''} }).then(result => {
-                    console.log(`${result.name}'s code has expired'`);
+                    console.log(`${result.name}'s code has expired`);
                 })
             });
         });
