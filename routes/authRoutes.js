@@ -107,7 +107,7 @@ router.post('/stuSignUp', urlencodedParser, (req,res) => {
 });
 
 router.post('/orgLogin', passport.authenticate('local', {
-                           failureRedirect:'/orgLogin'
+                           failureRedirect:'/org/orgLogin?error=true'
                          }), (req,res) => {
                            res.redirect('/org/dashboard');
 });
