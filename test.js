@@ -1,5 +1,10 @@
-let moment = require('moment');
-let string = '12:31';
+var mongoose = require('mongoose');
+mongoose.connect('mongodb://localhost/arcscan');
 
-let array = string.split(':');
-console.log(array);
+var db = mongoose.connection;
+db.on('error', console.error.bind(console, 'connection error:'));
+db.once('open', function() {
+  // we're connected!
+  console.log("connected");
+});
+
