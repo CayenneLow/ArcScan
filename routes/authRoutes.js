@@ -91,7 +91,7 @@ router.post('/stuSignUp', urlencodedParser, (req,res) => {
                                     password: hash,
                                     email: req.body.email
                                 });
-                                newUser.save().then((success) => res.render('studentLogin',{client:req.user}),
+                                newUser.save().then((success) => res.redirect('/student/stuLogin'),
                                                     (error) => {
                                                         console.log(error);
                                                         res.redirect('/student/stuSignUp');
@@ -133,7 +133,7 @@ router.post('/orgSignUp', urlencodedParser, (req,res) => {
                                     password: hash,
                                     email: req.body.email
                                 });
-                                newOrg.save().then(res.render('orgLogin',{client:req.user}));
+                                newOrg.save().then(res.redirect('/org/orgLogin'));
                             });
                         }
                     });
