@@ -21,6 +21,9 @@
 
                 <input type="submit"></input>
             </form>
+            <% if (error) { %>
+            <p> Incorrect zID/Password </p>
+            <% } %>
             <p> New User? <a href="/student/stuSignUp"> Sign Up </a></p>
 	</body>
 </html>

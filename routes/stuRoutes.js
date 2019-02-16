@@ -9,7 +9,11 @@ const user = db.user;
 const org = db.org;
 
 router.get('/stuLogin', (req, res) => {
-    res.render('studentLogin', {client:req.user});
+    let error = false;
+    if (req.query.error) {
+        error = true;
+    }
+    res.render('studentLogin', {error:error, client:req.user});
 });
 
 router.get('/stuSignUp', (req,res) => {
