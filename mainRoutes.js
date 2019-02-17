@@ -9,8 +9,8 @@ const orgRoutes = require('./routes/orgRoutes.js');
 
 // database connection
 var mongoose = require('mongoose');
-//mongoose.connect(`mongodb://${key.mongodb.username}:${key.mongodb.password}@ds331135.mlab.com:31135/arcscan`,{useNewUrlParser:true});
-mongoose.connect('mongodb://localhost/arcscan', {useNewUrlParser:true});
+mongoose.connect(`mongodb://${key.mongodb.username}:${key.mongodb.password}@ds331135.mlab.com:31135/arcscan`,{useNewUrlParser:true});
+// mongoose.connect('mongodb://localhost/arcscan', {useNewUrlParser:true});
 const jobModel = require('./models/database.js').job;
 
 module.exports = function(app) {
