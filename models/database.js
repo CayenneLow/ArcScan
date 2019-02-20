@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 require('mongoose-type-email');
+require('mongoose-function')(mongoose);
 
 const userSchema = new mongoose.Schema({
     type: String,
@@ -33,7 +34,11 @@ const eventSchema = new mongoose.Schema({
 })
 
 const jobSchema = new mongoose.Schema({
-    name: String,
+    startTime: Date,
+    endTime: Date,
+    rule: String,
+    action: Function,
+    pending: Boolean
 })
 
 const user = mongoose.model('user', userSchema);

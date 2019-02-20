@@ -11,7 +11,7 @@ function convertToCron(recurr, dateobj){
       month = new schedule.Range(1,12);
       dayofweek = day;;
     } else {
-      datetime = new Date(dateobj.endDateTime);
+      datetime = new Date(dateobj.time);
       mins=datetime.getMinutes();
       hour=datetime.getHours();
       dayofmonth=datetime.getDate();

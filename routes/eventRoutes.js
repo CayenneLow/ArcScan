@@ -4,13 +4,33 @@ const urlencodedParser = bodyParser.urlencoded({extended: true});
 let randomNumber = require('../functions/RNG.js');
 let convertToCron = require('../functions/convertToCron.js');
 let moment = require('moment');
-let schedule = require('node-schedule');
+let key = require('../config/keys.js');
+let connectionURL = `mongodb://${key.mongodb.username}:${key.mongodb.password}@ds331135.mlab.com:31135/arcscan`
+const Agenda = require('agenda');
+const agenda = new Agenda({db:{address: connectionURL, options:{useNewUrlParser: true}}});
 
 // Database
 const db = require('../models/database.js');
 const event = db.event;
 const user = db.user;
 const org = db.org;
+const jobColl = db.job;
+
+// functions
+async function buildEvent(form, org) {
+    let newEvent = new event({
+        type: 'event',
+        name: form.name,
+        startDateTime: form.startDateTime,
+        endDateTime: form.endDateTime,
+        recurring: form.recurring,
+        daySelection: form.daySelection,
+        recurrFrom: form.recurrFrom,
+        recurrTo: form.recurrTo,
+        org: org
+    });
+    return newEvent;
+};
 
 router.get('/id/:id', (req,res) => {
     if (!req.user || req.user.type === 'user') {
@@ -26,7 +46,7 @@ router.get('/id/:id', (req,res) => {
                 let signedUsers = [];
                 result.signed.forEach((user) => {
                     signedUsers.push(user);
-                });
+                })
                 res.render('event', {event:currEvent, users:signedUsers});
             } else {
                 res.redirect('/org/dashboard');
@@ -39,98 +59,23 @@ router.get('/createEvent', (req, res) => {
     res.render('createEvent');
 });
 
-router.post('/createEvent', urlencodedParser, (req, res) => {
-    let newCode = randomNumber();
-    event.findOne({code:newCode}).then((result) => {
-        if (result != null) {
-            let bufferCode;
-            while(newCode === result.code) {
-                console.log("Duplicate code: generating new code");
-                bufferCode = randomNumber();
-            }
-            return bufferCode;
-        } else {
-            return newCode;
-        }
-    }).then((newCode) => {
-        // creates new Event and pushes to database
-        let newEvent = new event({
-            type: "event",
-            name: req.body.name,
-            code: newCode,
-            org: req.user,
-            startDateTime: req.body.startDateTime,
-            endDateTime: req.body.endDateTime,
-        });
-
-        if (req.body.recurring == 'on') {
-            newEvent.recurring = req.body.recurring;
-            newEvent.daySelection = req.body.daySelection;
-            newEvent.recurrFrom = req.body.recurrFrom;
-            newEvent.recurrTo = req.body.recurrTo;
-        }
-        newEvent.save().then(result => {
-            let startDateTime = moment(result.startDateTime).format();
-            let endDateTime = moment(result.endDateTime).format();
-            if (req.body.recurring == 'on') {
-                // if recurring, create a new event with same details and expire 
-                // code of first event
-                // cronTime is the day and time to start
-                let cronTime = convertToCron(true, {
-                    day: result.daySelection,
-                    start: result.recurrFrom 
-                });
-                
-                var j = schedule.scheduleJob({
-                    start: startDateTime,
-                    end: endDateTime,
-                    rule: cronTime
-                }, () => {
-                    let newCode = randomNumber();
-                    event.findOne({code:newCode}).then((result) => {
-                        if (result != null) {
-                            let bufferCode;
-                            while(newCode === result.code) {
-                                console.log("Duplicate code: generating new code");
-                                bufferCode = randomNumber();
-                            }
-                            return bufferCode;
-                        } else {
-                            return newCode;
-                        }
-                    }).then((newCode) => {
-                        let newEvent = new event({
-                            type: "event",
-                            name: result.name,
-                            code: newCode,
-                            org: result.org
-                        });
-                        newEvent.save();
-                    })
-                    // expire current event code
-                    event.findOneAndUpdate({_id:result.id},{$set: {code:''} }).then(result => {
-                        console.log(`${result.name}'s code has expired`);
-                    })
-                });
-            } else {
-                // all for scheduling
-                let cronTime = convertToCron(false, {endDateTime: endDateTime});
-                var j = schedule.scheduleJob({ 
-                    start: startDateTime, 
-                    end: endDateTime, 
-                    rule: cronTime 
-                }, () => {
-                    // remove event code
-                    event.findOneAndUpdate({_id:result.id},{$set: {code:''} }).then(result => {
-                        console.log(`${result.name}'s code has expired`);
-                    })
-                });
-            }
-        });
-
-        res.redirect('/org/dashboard');
-    });
-})
+router.post('/createEvent', urlencodedParser, async (req, res) => {
+    // extract event details, build event model
+    let newEvent = await buildEvent(req.body, req.user);
+    newEvent.save().then(() => res.redirect('/org/dashboard'));
+    // scheduling
+    // if recurring, every day within a range of dates
+    // activate code at the event start time and deactivate at event end time
+    let startDateTime = moment(newEvent.startDateTime).format();
+    let endDateTime = moment(newEvent.endDateTime).format();
+    if (newEvent.recurring === 'on') {
+        
+    } else {
+        
+    }
+    
+    // if not recurring, activate code at start of date, deactivate at end
+});
 
 router.get('/id/:id/delete', (req,res) => {
     let eventID = req.params.id;
@@ -145,3 +90,15 @@ router.get('/id/:id/delete', (req,res) => {
 });
 
 module.exports = router;
+
+async function buildJob(rule, action) {
+    console.log(action);
+    let newJob = new jobColl({
+        rule: rule,
+        action: action,
+        pending: true
+    })
+    let jobObj = await newJob.save();
+    // return id
+    return jobObj.id;
+}
