@@ -4,9 +4,6 @@ const routes = require('./mainRoutes.js');
 const key = require('./config/keys');
 const bodyParser = require('body-parser').urlencoded({extended:true});
 const cookieSession = require('cookie-session');
-let connectionURL = `mongodb://${key.mongodb.username}:${key.mongodb.password}@ds331135.mlab.com:31135/arcscan`
-const Agenda = require('agenda');
-const agenda = new Agenda({db:{address: connectionURL, options:{useNewUrlParser: true}}});
 // database
 const db = require('./models/database.js');
 const job = db.job;
@@ -36,11 +33,6 @@ app.use(passport.session());
 app.use(express.static('./public'));
 
 routes(app);
-
-// scheduling
-(async function() {
-    await agenda.start();
-})();
 
 // listen to port
 app.listen(3000);

@@ -1,24 +1,13 @@
-function convertToCron(recurr, dateobj){
-    let mins, hour, dayofmonth, month, dayofweek; 
-    if (recurr) {
-      let day = convertDayToNum(dateobj.day);
-      let starttime = dateobj.time;
-      let timeArr = starttime.split(':');
+function convertToCron(dateString){
+    let string = new Date(dateString);
+    let minute = string.getMinutes();
+    let hour = string.getHours();
+    let dayMonth = string.getDate();
+    let month = string.getMonth() + 1;
+    let dayWeek = string.getDay();
     
-      mins = timeArr[1];
-      hour = timeArr[0];
-      dayofmonth = new schedule.Range(1,31);
-      month = new schedule.Range(1,12);
-      dayofweek = day;;
-    } else {
-      datetime = new Date(dateobj.time);
-      mins=datetime.getMinutes();
-      hour=datetime.getHours();
-      dayofmonth=datetime.getDate();
-      month=datetime.getMonth() + 1;
-      dayofweek=datetime.getDay(); 
-    }
-    return (mins + " " + hour + " " + dayofmonth + " " + month + " " + dayofweek);
+    let cron = `${minute} ${hour} ${dayMonth} ${month} ${dayWeek}`
+    return cron;
 }
 
 function convertDayToNum(dayString) {

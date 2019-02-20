@@ -32,6 +32,31 @@ async function buildEvent(form, org) {
     return newEvent;
 };
 
+// agenda
+agenda.define('start code', (job,done) => {
+    // gen code
+    let id = job.attrs.data.id;
+    randomNumber().then(code => {
+        event.findOneAndUpdate({_id: id}, {$set:{code:code}}).then(result => {
+            console.log(`${result.name} has started`);
+        });
+        done();
+    });
+});
+
+agenda.define('remove code', (job,done) => {
+    // gen code
+    let id = job.attrs.data.id;
+    event.findOneAndUpdate({_id: id}, {$set:{code:''}}).then(result => {
+        console.log(`${result.name} has ended`);
+    });
+    done();
+});
+
+(async function() {
+    await agenda.start();
+})();
+
 router.get('/id/:id', (req,res) => {
     if (!req.user || req.user.type === 'user') {
         res.redirect('/');
@@ -56,26 +81,25 @@ router.get('/id/:id', (req,res) => {
 });
 
 router.get('/createEvent', (req, res) => { res.render('createEvent'); }); 
+
 router.post('/createEvent', urlencodedParser, async (req, res) => {
     // extract event details, build event model
     let newEvent = await buildEvent(req.body, req.user);
-    newEvent.save().then(() => res.redirect('/org/dashboard'));
+    newEvent = await newEvent.save();
+    res.redirect('/org/dashboard');
     // scheduling
     // if recurring, every day within a range of dates
     // activate code at the event start time and deactivate at event end time
     let startDateTime = moment(newEvent.startDateTime).format();
     let endDateTime = moment(newEvent.endDateTime).format();
     if (newEvent.recurring === 'on') {
-        
+        console.log("not yet implemented");
     } else {
-        // create an event called 'new event' or whatever that takes in
-        // parameters in the data field. Job uses the parameters to
-        // query database and do the job. In this way, don't need to 
-        // create multiple agendas
-        
+    // if not recurring, activate code at start of date, deactivate at end
+        agenda.schedule(startDateTime, 'start code', {id: newEvent.id});
+        agenda.schedule(endDateTime, 'remove code', {id: newEvent.id});
     }
     
-    // if not recurring, activate code at start of date, deactivate at end
 });
 
 router.get('/id/:id/delete', (req,res) => {
@@ -92,17 +116,7 @@ router.get('/id/:id/delete', (req,res) => {
 
 module.exports = router;
 
-// agendas
-agenda.define('new event', (job,done) => {
-    // job.attrs.data.event;
-    // gen code
-    event.findOne({_id: id}).then(result => {
-        result.code
-    }) ;
-    // delete code
-    done();
-})
-
+/*
 async function buildJob(rule, action) {
     console.log(action);
     let newJob = new jobColl({
@@ -114,3 +128,4 @@ async function buildJob(rule, action) {
     // return id
     return jobObj.id;
 }
+*/
