@@ -55,10 +55,7 @@ router.get('/id/:id', (req,res) => {
     }
 });
 
-router.get('/createEvent', (req, res) => {
-    res.render('createEvent');
-});
-
+router.get('/createEvent', (req, res) => { res.render('createEvent'); }); 
 router.post('/createEvent', urlencodedParser, async (req, res) => {
     // extract event details, build event model
     let newEvent = await buildEvent(req.body, req.user);
@@ -71,6 +68,10 @@ router.post('/createEvent', urlencodedParser, async (req, res) => {
     if (newEvent.recurring === 'on') {
         
     } else {
+        // create an event called 'new event' or whatever that takes in
+        // parameters in the data field. Job uses the parameters to
+        // query database and do the job. In this way, don't need to 
+        // create multiple agendas
         
     }
     
@@ -90,6 +91,17 @@ router.get('/id/:id/delete', (req,res) => {
 });
 
 module.exports = router;
+
+// agendas
+agenda.define('new event', (job,done) => {
+    // job.attrs.data.event;
+    // gen code
+    event.findOne({_id: id}).then(result => {
+        result.code
+    }) ;
+    // delete code
+    done();
+})
 
 async function buildJob(rule, action) {
     console.log(action);
