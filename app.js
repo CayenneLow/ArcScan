@@ -4,6 +4,7 @@ const routes = require('./mainRoutes.js');
 const key = require('./config/keys');
 const bodyParser = require('body-parser').urlencoded({extended:true});
 const cookieSession = require('cookie-session');
+const tk = require('timekeeper');
 // database
 const db = require('./models/database.js');
 const job = db.job;
@@ -34,5 +35,8 @@ app.use(express.static('./public'));
 
 routes(app);
 
+var time = new Date('March 10, 2019 1:05:01');
+tk.travel(time);
+console.log(new Date());
 // listen to port
 app.listen(3000);

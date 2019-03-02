@@ -2,7 +2,7 @@ const router = require('express').Router();
 const bodyParser = require('body-parser');
 const urlencodedParser = bodyParser.urlencoded({extended: true});
 let randomNumber = require('../functions/RNG.js');
-let convertToCron = require('../functions/convertToCron.js');
+let convertNumToDay = require('../functions/convertToCron.js').convertNumToDay;
 let moment = require('moment');
 let key = require('../config/keys.js');
 let connectionURL = `mongodb://${key.mongodb.username}:${key.mongodb.password}@ds331135.mlab.com:31135/arcscan`
@@ -24,23 +24,45 @@ async function buildEvent(form, org) {
         startDateTime: form.startDateTime,
         endDateTime: form.endDateTime,
         recurring: form.recurring,
-        daySelection: form.daySelection,
-        recurrFrom: form.recurrFrom,
-        recurrTo: form.recurrTo,
+        recurrEnd: form.recurrEnd,
         org: org
     });
     return newEvent;
 };
 
 // agenda
+agenda.define('recurrJob', async (job, done) => {
+    let eventDeets = job.attrs.data.eventDeets;
+    let userDeets = job.attrs.data.userDeets;
+    // need to change eventDeets with new startdate and enddate
+    // math for endDateTime
+    // calculate time between startdatetime and enddatetime
+    let startDateTime = eventDeets.startDateTime;
+    let endDateTime = eventDeets.endDateTime;
+    let difference = Date.parse(endDateTime) - Date.parse(startDateTime);
+    // assigning new date for new event that's about to be created
+    eventDeets.startDateTime = new Date();
+    // math for endDateTime
+    let newEnd = new Date(Date.parse(eventDeets.startDateTime) + difference);
+    eventDeets.endDateTime = newEnd;
+    eventDeets.startDateTime = moment.parseZone(eventDeets.startDateTime).format();
+    eventDeets.endDateTime = moment.parseZone(eventDeets.endDateTime).format();
+    let newEvent = await buildEvent(eventDeets, userDeets);
+    newEvent = await newEvent.save();
+    console.log(newEvent);
+    agenda.schedule(newEvent.startDateTime, 'start code', {id: newEvent.id});
+    agenda.schedule(newEvent.endDateTime, 'remove code', {id: newEvent.id});
+    done();
+});
+
 agenda.define('start code', (job,done) => {
     // gen code
     let id = job.attrs.data.id;
     randomNumber().then(code => {
-        event.findOneAndUpdate({_id: id}, {$set:{code:code}}).then(result => {
+       event.findOneAndUpdate({_id: id}, {$set:{code:code}}).then(result => {
             console.log(`${result.name} has started`);
+            done();
         });
-        done();
     });
 });
 
@@ -49,8 +71,8 @@ agenda.define('remove code', (job,done) => {
     let id = job.attrs.data.id;
     event.findOneAndUpdate({_id: id}, {$set:{code:''}}).then(result => {
         console.log(`${result.name} has ended`);
+        done();
     });
-    done();
 });
 
 (async function() {
@@ -90,15 +112,27 @@ router.post('/createEvent', urlencodedParser, async (req, res) => {
     // scheduling
     // if recurring, every day within a range of dates
     // activate code at the event start time and deactivate at event end time
-    let startDateTime = moment(newEvent.startDateTime).format();
-    let endDateTime = moment(newEvent.endDateTime).format();
+    let startDateTime = moment.parseZone(newEvent.startDateTime).format();
+    let endDateTime = moment.parseZone(newEvent.endDateTime).format();
     if (newEvent.recurring === 'on') {
-        console.log("not yet implemented");
-    } else {
+        /*
+        startDateTime = new Date(startDateTime);
+        // day from 0-6 (0 is Sunday)
+        let day = Number(startDateTime.getDay());
+        dayString = convertNumToDay(day);
+        console.log(dayString);
+        */
+        // repeat weekly
+        req.body.startDateTime = startDateTime;
+        req.body.endDateTime = endDateTime;
+        agenda.every('1 week', 'recurrJob', {
+            eventDeets: req.body,
+            userDeets: req.user
+        });
+    } 
     // if not recurring, activate code at start of date, deactivate at end
-        agenda.schedule(startDateTime, 'start code', {id: newEvent.id});
-        agenda.schedule(endDateTime, 'remove code', {id: newEvent.id});
-    }
+    agenda.schedule(startDateTime, 'start code', {id: newEvent.id});
+    agenda.schedule(endDateTime, 'remove code', {id: newEvent.id});
     
 });
 
@@ -115,17 +149,3 @@ router.get('/id/:id/delete', (req,res) => {
 });
 
 module.exports = router;
-
-/*
-async function buildJob(rule, action) {
-    console.log(action);
-    let newJob = new jobColl({
-        rule: rule,
-        action: action,
-        pending: true
-    })
-    let jobObj = await newJob.save();
-    // return id
-    return jobObj.id;
-}
-*/

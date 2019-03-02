@@ -25,9 +25,7 @@ const eventSchema = new mongoose.Schema({
     startDateTime: String,
     endDateTime: String,
     recurring: String,
-    daySelection: String,
-    recurrFrom: String,
-    recurrTo: String,
+    recurrEnd: String,
     code: Number,
     org: orgSchema,
     signed: [userSchema]

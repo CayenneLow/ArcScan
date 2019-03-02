@@ -38,4 +38,41 @@ function convertDayToNum(dayString) {
     return num;
 }
 
-module.exports = convertToCron;
+function convertNumToDay(dayNum) {
+    console.log(dayNum);
+    console.log(typeof dayNum);
+    let string;
+    switch(dayNum) {
+        case 0:
+            string = 'Sunday';
+            break;
+        case 1:
+            string = 'Monday';
+            break;
+        case 2:
+            string = 'Tuesday';
+            break;
+        case 3:
+            string = 'Wednesday';
+            break;
+        case 4:
+            string = 'Thursday';
+            break;
+        case 5:
+            string = 'Friday';
+            break;
+        case 6:
+            string = 'Saturday';
+            break;
+        default:
+            string = 'Invalid Number';
+            break;
+    }
+    return string;
+}
+
+module.exports = {
+    convertToCron: convertToCron,
+    convertDayToNum: convertDayToNum,
+    convertNumToDay: convertNumToDay
+}
