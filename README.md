@@ -8,4 +8,4 @@ Making Arc signups easier
 
 # Troubleshooting: Error with bcrypt.lib
 1) ```rm -rf node_modules ```
-2) npm update
+2) ```npm update```
