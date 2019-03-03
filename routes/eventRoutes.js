@@ -112,9 +112,9 @@ router.post('/createEvent', urlencodedParser, async (req, res) => {
     // scheduling
     // if recurring, every day within a range of dates
     // activate code at the event start time and deactivate at event end time
+    console.log(req.body.startDateTime);
     req.body.startDateTime = moment.parseZone(req.body.startDateTime).format();
     req.body.endDateTime = moment.parseZone(req.body.endDateTime).format();
-    res.redirect('/org/dashboard');
     if (req.body.recurring === 'on') {
         /*
         startDateTime = new Date(startDateTime);
@@ -132,10 +132,12 @@ router.post('/createEvent', urlencodedParser, async (req, res) => {
         let newEvent = await buildEvent(req.body, req.user);
         newEvent = await newEvent.save();
         // if not recurring, activate code at start of date, deactivate at end
+        console.log(req.body.startDateTime);
+        console.log(req.body.endDateTime);
         agenda.schedule(req.body.startDateTime, 'start code', {id: newEvent.id});
         agenda.schedule(req.body.endDateTime, 'remove code', {id: newEvent.id});
     }
-    
+    res.redirect('/org/dashboard');
 });
 
 router.get('/id/:id/delete', (req,res) => {
