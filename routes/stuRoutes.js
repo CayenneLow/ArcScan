@@ -40,26 +40,47 @@ router.post('/input', urlencodedParser, (req, res) => {
     // query the event that has the code
     event.findOne({code:inputCode}).then(result => {
         if (result != null) {
-            // check for duplicate signup
-            let comparisonArray = result.signed.map((user) => {
-                // first construct an array of all signed ids
-               return user.id;
-            });
-            comparisonArray = comparisonArray.filter(id => {
-                return id == req.user.id;
-            });
-            if(comparisonArray.length < 1) {
-                // Note for future: the ".then" is essential for update to work
-                event.update({_id:result.id}, {$push : {signed:req.user}})
-                .then(()=>console.log("Signed Up"),(reject)=>console.log(reject));
-                res.redirect('/student/input?found=true&event=' + result.name);
-            } else {
-                res.redirect('/student/input?found=true&event=false&duplicate=true')
-            }
+            signUpUser(result, req.user);
         } else {
             res.redirect('/student/input?found=false&event=false&duplicate=true');
         }
     });
 });
 
+router.get('/qrinput', (req,res) => {
+    if (req.user && req.user.type === 'user') {
+        let eventID = req.query.eventID;
+        event.findOne({id:eventID}).then(result => {
+            if (result != null) {
+                signUpUser(result, req.user);
+            } else {
+                res.redirect('/student/input?found=false&event=false&duplicate=true');
+            }
+        })
+    } else {
+        res.redirect('/student/stuLogin');
+    }
+});
+
 module.exports = router;
+
+// event: event object
+// user: req.user object
+function signUpUser(event, user){
+    // check for duplicate signup
+    let comparisonArray = event.signed.map((user) => {
+        // first construct an array of all signed ids
+       return user.id;
+    }).filter(id => {
+        return id == req.user.id;
+    });
+    
+    if(comparisonArray.length < 1) {
+        // Note for future: the ".then" is essential for update to work
+        event.update({_id:event.id}, {$push : {signed:user}})
+        .then(()=>console.log("Signed Up"),(reject)=>console.log(reject));
+        res.redirect('/student/input?found=true&event=' + event.name);
+    } else {
+        res.redirect('/student/input?found=true&event=false&duplicate=true')
+    }
+}

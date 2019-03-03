@@ -27,6 +27,9 @@
                 Code : <%= event.code %>
                 <% } %>
             </h1>
+
+            <div id="qrcode"><p><img src="<%= url %>"/></p></div>
+
             <button onclick="refresh()">Refresh List </button>
 
             <table id="signed" class="display nowrap" style="width:100%">
