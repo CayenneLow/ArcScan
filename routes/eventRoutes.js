@@ -47,6 +47,9 @@ agenda.define('recurrJob', async (job, done) => {
     eventDeets.endDateTime = newEnd;
     eventDeets.startDateTime = moment.parseZone(eventDeets.startDateTime).format();
     eventDeets.endDateTime = moment.parseZone(eventDeets.endDateTime).format();
+    console.log("=== in recurrJob ===");
+    console.log("Start: " + eventDeets.startDateTime);
+    console.log("End: " + eventDeets.endDateTime);
     let newEvent = await buildEvent(eventDeets, userDeets);
     newEvent = await newEvent.save();
     console.log(newEvent);
@@ -106,15 +109,13 @@ router.get('/createEvent', (req, res) => { res.render('createEvent'); });
 
 router.post('/createEvent', urlencodedParser, async (req, res) => {
     // extract event details, build event model
-    let newEvent = await buildEvent(req.body, req.user);
-    newEvent = await newEvent.save();
-    res.redirect('/org/dashboard');
     // scheduling
     // if recurring, every day within a range of dates
     // activate code at the event start time and deactivate at event end time
-    let startDateTime = moment.parseZone(newEvent.startDateTime).format();
-    let endDateTime = moment.parseZone(newEvent.endDateTime).format();
-    if (newEvent.recurring === 'on') {
+    req.body.startDateTime = moment.parseZone(req.body.startDateTime).format();
+    req.body.endDateTime = moment.parseZone(req.body.endDateTime).format();
+    res.redirect('/org/dashboard');
+    if (req.body.recurring === 'on') {
         /*
         startDateTime = new Date(startDateTime);
         // day from 0-6 (0 is Sunday)
@@ -123,16 +124,17 @@ router.post('/createEvent', urlencodedParser, async (req, res) => {
         console.log(dayString);
         */
         // repeat weekly
-        req.body.startDateTime = startDateTime;
-        req.body.endDateTime = endDateTime;
         agenda.every('1 week', 'recurrJob', {
             eventDeets: req.body,
             userDeets: req.user
-        });
-    } 
-    // if not recurring, activate code at start of date, deactivate at end
-    agenda.schedule(startDateTime, 'start code', {id: newEvent.id});
-    agenda.schedule(endDateTime, 'remove code', {id: newEvent.id});
+        }, {skipImmediate:true});
+    }else {
+        let newEvent = await buildEvent(req.body, req.user);
+        newEvent = await newEvent.save();
+        // if not recurring, activate code at start of date, deactivate at end
+        agenda.schedule(req.body.startDateTime, 'start code', {id: newEvent.id});
+        agenda.schedule(req.body.endDateTime, 'remove code', {id: newEvent.id});
+    }
     
 });
 

@@ -35,8 +35,10 @@ app.use(express.static('./public'));
 
 routes(app);
 
-var time = new Date('March 10, 2019 1:05:01');
+var time = new Date('March 10, 2019 16:41:45');
 tk.travel(time);
 console.log(new Date());
+// better errors
+require('pretty-error').start();
 // listen to port
 app.listen(3000);
