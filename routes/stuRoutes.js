@@ -40,7 +40,7 @@ router.post('/input', urlencodedParser, (req, res) => {
     // query the event that has the code
     event.findOne({code:inputCode}).then(result => {
         if (result != null) {
-            signUpUser(result, req.user);
+            signUpUser(result, req.user, res);
         } else {
             res.redirect('/student/input?found=false&event=false&duplicate=true');
         }
@@ -50,9 +50,10 @@ router.post('/input', urlencodedParser, (req, res) => {
 router.get('/qrinput', (req,res) => {
     if (req.user && req.user.type === 'user') {
         let eventID = req.query.eventID;
-        event.findOne({id:eventID}).then(result => {
+        event.findOne({_id:eventID}).then(result => {
+            console.log(result);
             if (result != null) {
-                signUpUser(result, req.user);
+                signUpUser(result, req.user, res);
             } else {
                 res.redirect('/student/input?found=false&event=false&duplicate=true');
             }
@@ -66,20 +67,20 @@ module.exports = router;
 
 // event: event object
 // user: req.user object
-function signUpUser(event, user){
+function signUpUser(eventObj, user, res){
     // check for duplicate signup
-    let comparisonArray = event.signed.map((user) => {
+    let comparisonArray = eventObj.signed.map((sign) => {
         // first construct an array of all signed ids
-       return user.id;
+       return sign.id;
     }).filter(id => {
-        return id == req.user.id;
+        return id == user.id;
     });
     
     if(comparisonArray.length < 1) {
         // Note for future: the ".then" is essential for update to work
-        event.update({_id:event.id}, {$push : {signed:user}})
+        event.update({_id:eventObj.id}, {$push : {signed:user}})
         .then(()=>console.log("Signed Up"),(reject)=>console.log(reject));
-        res.redirect('/student/input?found=true&event=' + event.name);
+        res.redirect('/student/input?found=true&event=' + eventObj.name);
     } else {
         res.redirect('/student/input?found=true&event=false&duplicate=true')
     }
