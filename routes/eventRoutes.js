@@ -103,7 +103,8 @@ router.get('/id/:id', (req,res) => {
                 })
                 // render QR Code
                 let partialURL = '/student/qrinput?eventID=' + result.id;
-                let fullURL = req.protocol+'://'+'192.168.43.200:3000'+partialURL;
+                let fullURL = req.protocol+'://'+req.get('host')+partialURL;
+                console.log(fullURL);
                 QRCode.toDataURL(fullURL).then(url => {
                     res.render('event', {
                         event:currEvent, 
