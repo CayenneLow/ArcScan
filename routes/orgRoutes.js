@@ -12,7 +12,11 @@ const org = db.org;
 router.use('/event', eventRoutes);
 
 router.get('/orgLogin', (req,res) => {
-    res.render('orgLogin', {client:req.user});
+    let error = false;
+    if (req.query.error) {
+        error = true;
+    }
+    res.render('orgLogin', { error: error, client:req.user});
 })
 
 

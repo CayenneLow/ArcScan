@@ -18,6 +18,9 @@
 
                 <input type="submit"></input>
             </form>
+            <% if (error) { %>
+            <p> Incorrect username/password </p>
+            <% } %>
             <p> New Organization? <a href="/org/orgSignUp"> Sign Up </a></p>
 	</body>
 </html>

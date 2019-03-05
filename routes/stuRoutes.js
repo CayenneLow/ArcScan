@@ -1,6 +1,5 @@
 const router = require('express').Router();
-const bodyParser = require('body-parser');
-const urlencodedParser = bodyParser.urlencoded({extended: true});
+const bodyParser = require('body-parser'); const urlencodedParser = bodyParser.urlencoded({extended: true});
 
 // Database
 const db = require('../models/database.js');
@@ -9,7 +8,29 @@ const user = db.user;
 const org = db.org;
 
 router.get('/stuLogin', (req, res) => {
-    res.render('studentLogin', {client:req.user});
+    let error = false;
+    if (req.query.error) {
+        error = true;
+    }
+    let qr = false;
+    if (req.query.qr) {
+        qr = true;
+        event.findOne({_id:req.query.event}).then(result => {
+            res.render('studentLogin', {
+                error:error, 
+                client:req.user,
+                qr:qr, 
+                event:result.id
+            });
+        });
+    } else {
+        res.render('studentLogin', {
+            error:error, 
+            client:req.user,
+            qr:qr,
+            event:null
+        });
+    }
 });
 
 router.get('/stuSignUp', (req,res) => {
@@ -36,26 +57,49 @@ router.post('/input', urlencodedParser, (req, res) => {
     // query the event that has the code
     event.findOne({code:inputCode}).then(result => {
         if (result != null) {
-            // check for duplicate signup
-            let comparisonArray = result.signed.map((user) => {
-                // first construct an array of all signed ids
-               return user.id;
-            });
-            comparisonArray = comparisonArray.filter(id => {
-                return id == req.user.id;
-            });
-            if(comparisonArray.length < 1) {
-                // Note for future: the ".then" is essential for update to work
-                event.update({_id:result.id}, {$push : {signed:req.user}})
-                .then(()=>console.log("Signed Up"),(reject)=>console.log(reject));
-                res.redirect('/student/input?found=true&event=' + result.name);
-            } else {
-                res.redirect('/student/input?found=true&event=false&duplicate=true')
-            }
+            signUpUser(result, req.user, res);
         } else {
             res.redirect('/student/input?found=false&event=false&duplicate=true');
         }
     });
 });
 
-module.exports = router;
+router.get('/qrinput', (req,res) => {
+    let eventID = req.query.eventID;
+    if (req.user && req.user.type === 'user') {
+        event.findOne({_id:eventID}).then(result => {
+            console.log(result);
+            if (result != null) {
+                signUpUser(result, req.user, res);
+            } else {
+                res.redirect('/student/input?found=false&event=false&duplicate=true');
+            }
+        })
+    } else {
+        res.redirect('/student/stuLogin?qr=true&event='+eventID);
+    }
+});
+
+
+// event: event object
+// user: req.user object
+function signUpUser(eventObj, user, res){
+    // check for duplicate signup
+    let comparisonArray = eventObj.signed.map((sign) => {
+        // first construct an array of all signed ids
+       return sign.id;
+    }).filter(id => {
+        return id == user.id;
+    });
+    
+    if(comparisonArray.length < 1) {
+        // Note for future: the ".then" is essential for update to work
+        event.update({_id:eventObj.id}, {$push : {signed:user}})
+        .then(()=>console.log("Signed Up"),(reject)=>console.log(reject));
+        res.redirect('/student/input?found=true&event=' + eventObj.name);
+    } else {
+        res.redirect('/student/input?found=true&event=false&duplicate=true')
+    }
+}
+module.exports.router = router;
+module.exports.signUpUser = signUpUser;

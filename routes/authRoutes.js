@@ -1,7 +1,10 @@
 const router = require('express').Router();
-const passport = require('passport'); const LocalStrategy = require('passport-local').Strategy; const db = require('../models/database.js'); 
+const passport = require('passport'); const LocalStrategy = require('passport-local').Strategy; 
+const db = require('../models/database.js'); 
+const events = db.event;
 const bodyParser = require('body-parser');
 const urlencodedParser = bodyParser.urlencoded({extended: true});
+const {signUpUser} = require('./stuRoutes.js'); 
 
 // password encryption
 const bcrypt = require('bcrypt');
@@ -59,12 +62,18 @@ passport.deserializeUser((id,done) => {
             done(null, user);
         }
     });
-});
+}); 
 
 router.post('/stuLogin', passport.authenticate('local', {
-    failureRedirect:'/student/student-fail'
+    failureRedirect:'/student/stuLogin?error=true'
     }), (req,res) => {
-    res.redirect('/student/input?found=true&event=false');
+        if (req.body.qr) {
+            events.findOne({_id:req.body.event}).then(result => {
+                signUpUser(result, req.user, res);
+            });
+        } else {
+            res.redirect('/student/input?found=true&event=false');
+        }
 });
 
 router.post('/stuSignUp', urlencodedParser, (req,res) => {
@@ -91,7 +100,7 @@ router.post('/stuSignUp', urlencodedParser, (req,res) => {
                                     password: hash,
                                     email: req.body.email
                                 });
-                                newUser.save().then((success) => res.render('studentLogin',{client:req.user}),
+                                newUser.save().then((success) => res.redirect('/student/stuLogin'),
                                                     (error) => {
                                                         console.log(error);
                                                         res.redirect('/student/stuSignUp');
@@ -107,7 +116,7 @@ router.post('/stuSignUp', urlencodedParser, (req,res) => {
 });
 
 router.post('/orgLogin', passport.authenticate('local', {
-                           failureRedirect:'/orgLogin'
+                           failureRedirect:'/org/orgLogin?error=true'
                          }), (req,res) => {
                            res.redirect('/org/dashboard');
 });
@@ -133,7 +142,7 @@ router.post('/orgSignUp', urlencodedParser, (req,res) => {
                                     password: hash,
                                     email: req.body.email
                                 });
-                                newOrg.save().then(res.render('orgLogin',{client:req.user}));
+                                newOrg.save().then(res.redirect('/org/orgLogin'));
                             });
                         }
                     });

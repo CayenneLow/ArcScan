@@ -3,11 +3,11 @@ const bodyParser = require('body-parser');
 const urlencodedParser = bodyParser.urlencoded({extended: true});
 let randomNumber = require('../functions/RNG.js');
 let convertNumToDay = require('../functions/convertToCron.js').convertNumToDay;
-let moment = require('moment');
-let key = require('../config/keys.js');
+let moment = require('moment'); let key = require('../config/keys.js');
 let connectionURL = `mongodb://${key.mongodb.username}:${key.mongodb.password}@ds331135.mlab.com:31135/arcscan`
 const Agenda = require('agenda');
 const agenda = new Agenda({db:{address: connectionURL, options:{useNewUrlParser: true}}});
+const QRCode = require('qrcode');
 
 // Database
 const db = require('../models/database.js');
@@ -97,7 +97,16 @@ router.get('/id/:id', (req,res) => {
                 result.signed.forEach((user) => {
                     signedUsers.push(user);
                 })
-                res.render('event', {event:currEvent, users:signedUsers});
+                // render QR Code
+                let partialURL = '/student/qrinput?eventID=' + result.id;
+                let fullURL = req.protocol+'://'+'192.168.43.200:3000'+partialURL;
+                QRCode.toDataURL(fullURL).then(url => {
+                    res.render('event', {
+                        event:currEvent, 
+                        users:signedUsers,
+                        url: url
+                    });
+                })
             } else {
                 res.redirect('/org/dashboard');
             }

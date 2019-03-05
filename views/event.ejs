@@ -24,9 +24,12 @@
                 <% if (event.code == null) { %>
                 Code: Code Expired/Event has not started
                 <% } else { %>
+                <div id="qrcode"><p><img src="<%= url %>"/></p></div>
                 Code : <%= event.code %>
                 <% } %>
             </h1>
+
+
             <button onclick="refresh()">Refresh List </button>
 
             <table id="signed" class="display nowrap" style="width:100%">
