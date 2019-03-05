@@ -18,7 +18,10 @@
                 </br>
                 <label for="password"><b>Password: </b></label>
                 <input type="password" name="password" required></input>
-
+                <% if (qr === true) { %>
+                <input id="qr" name="qr" type="hidden" value="true">
+                <input id="event" name="event" type="hidden" value="<%=event%>">
+                <% } %>
                 <input type="submit"></input>
             </form>
             <% if (error) { %>
