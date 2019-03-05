@@ -1,6 +1,5 @@
 const router = require('express').Router();
-const bodyParser = require('body-parser');
-const urlencodedParser = bodyParser.urlencoded({extended: true});
+const bodyParser = require('body-parser'); const urlencodedParser = bodyParser.urlencoded({extended: true});
 
 // Database
 const db = require('../models/database.js');
@@ -13,7 +12,25 @@ router.get('/stuLogin', (req, res) => {
     if (req.query.error) {
         error = true;
     }
-    res.render('studentLogin', {error:error, client:req.user});
+    let qr = false;
+    if (req.query.qr) {
+        qr = true;
+        event.findOne({_id:req.query.event}).then(result => {
+            res.render('studentLogin', {
+                error:error, 
+                client:req.user,
+                qr:qr, 
+                event:result.id
+            });
+        });
+    } else {
+        res.render('studentLogin', {
+            error:error, 
+            client:req.user,
+            qr:qr,
+            event:null
+        });
+    }
 });
 
 router.get('/stuSignUp', (req,res) => {
@@ -48,8 +65,8 @@ router.post('/input', urlencodedParser, (req, res) => {
 });
 
 router.get('/qrinput', (req,res) => {
+    let eventID = req.query.eventID;
     if (req.user && req.user.type === 'user') {
-        let eventID = req.query.eventID;
         event.findOne({_id:eventID}).then(result => {
             console.log(result);
             if (result != null) {
@@ -59,11 +76,10 @@ router.get('/qrinput', (req,res) => {
             }
         })
     } else {
-        res.redirect('/student/stuLogin');
+        res.redirect('/student/stuLogin?qr=true&event='+eventID);
     }
 });
 
-module.exports = router;
 
 // event: event object
 // user: req.user object
@@ -85,3 +101,5 @@ function signUpUser(eventObj, user, res){
         res.redirect('/student/input?found=true&event=false&duplicate=true')
     }
 }
+module.exports.router = router;
+module.exports.signUpUser = signUpUser;

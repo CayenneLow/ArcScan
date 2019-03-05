@@ -4,7 +4,7 @@ const key = require('./config/keys.js');
 
 // routes
 const authRoutes = require('./routes/authRoutes.js');
-const stuRoutes = require('./routes/stuRoutes.js');
+const stuRoutes = require('./routes/stuRoutes.js').router;
 const orgRoutes = require('./routes/orgRoutes.js');
 
 // database connection

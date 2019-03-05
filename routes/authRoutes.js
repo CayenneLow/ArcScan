@@ -1,7 +1,10 @@
 const router = require('express').Router();
-const passport = require('passport'); const LocalStrategy = require('passport-local').Strategy; const db = require('../models/database.js'); 
+const passport = require('passport'); const LocalStrategy = require('passport-local').Strategy; 
+const db = require('../models/database.js'); 
+const events = db.event;
 const bodyParser = require('body-parser');
 const urlencodedParser = bodyParser.urlencoded({extended: true});
+const {signUpUser} = require('./stuRoutes.js'); 
 
 // password encryption
 const bcrypt = require('bcrypt');
@@ -59,12 +62,18 @@ passport.deserializeUser((id,done) => {
             done(null, user);
         }
     });
-});
+}); 
 
 router.post('/stuLogin', passport.authenticate('local', {
     failureRedirect:'/student/stuLogin?error=true'
     }), (req,res) => {
-    res.redirect('/student/input?found=true&event=false');
+        if (req.body.qr) {
+            events.findOne({_id:req.body.event}).then(result => {
+                signUpUser(result, req.user, res);
+            });
+        } else {
+            res.redirect('/student/input?found=true&event=false');
+        }
 });
 
 router.post('/stuSignUp', urlencodedParser, (req,res) => {
