@@ -2,25 +2,37 @@
 <html>
 	<head>
         <meta charset="utf-8" />
-		<title>Login</title>
-                <% if (client === undefined || client.type === 'org') { %>
-                    <p> You need to be signed in as a student </p>
-                <% } %>
+        <title>Student Login</title>
+        <link rel='shortcut icon' type="image/png" href="/images/ArcScan.png">
 	</head>
 	<body>
             <% include partials/nav.ejs %>
-            <form method="POST" id="loginForm" action="/auth/stuLogin">
-                <label for="username"><b>zID: </b></label>
-                <input type="text" name="username" required pattern="[0-9]{7}"
-                oninvalid="setCustomValidity('Enter your 7 digit zID (only numbers)')" 
-                oninput="setCustomValidity('')"
-                ></input>
-                </br>
-                <label for="password"><b>Password: </b></label>
-                <input type="password" name="password" required></input>
-
-                <input type="submit"></input>
-            </form>
-            <p> New User? <a href="/student/stuSignUp"> Sign Up </a></p>
+        <div id="login-container"> 
+            <div class="login-blocks login-right" class="">
+                <h1 class="logo">Arc<span style="color: white">Scan</span><a href="/"><span style="position:absolute;width:100%;height:100%;top:0;left: 0; z-index: 1;"></span></a></h1>
+                <% if (client === undefined || client.type === 'org') { %>
+                    <p> Hey, we noticed you're not signed in as a Student! </p>
+                <% } %>
+                <p> Don't have an account yet? We've got you covered! </p>
+                <a href="/student/stuSignUp" class="block-buttons"> Sign Up Here</a>
+            </div>
+            <div class="login-blocks">
+                <p>Login with your zID and password</p>
+                <form method="POST" id="loginForm" action="/auth/stuLogin">
+                    <label for="username">zID: </label> <br>
+                    <input type="text" name="username" required pattern="[0-9]{7}"
+                    oninvalid="setCustomValidity('Enter your 7 digit zID (only numbers)')" 
+                    oninput="setCustomValidity('')"
+                    ></input>
+                    </br>
+                    <label for="password">Password:</label> <br>
+                    <input type="password" name="password" required></input>
+                    
+                    <p><input type="submit" value="Login"></input></p>
+                </form>
+                
+            </div>
+        </div>
+       
 	</body>
 </html>
