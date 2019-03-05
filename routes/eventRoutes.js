@@ -85,8 +85,12 @@ router.get('/id/:id', (req,res) => {
         // need name and code
         event.findOne({_id: req.params.id.toString()}).then((result) => {
             if (result) {
+                let startDateTime = moment(result.startDateTime).format('dddd MMMM Do YYYY, h:mm a')
+                let endDateTime = moment(result.endDateTime).format('dddd MMMM Do YYYY, h:mm a')
                 let currEvent = {
                     name:result.name, 
+                    startDateTime: startDateTime,
+                    endDateTime: endDateTime,
                     code:result.code
                 };
                 let signedUsers = [];
@@ -141,7 +145,6 @@ router.get('/id/:id/delete', (req,res) => {
     let eventID = req.params.id;
     console.log(eventID);
     event.findOneAndDelete({_id:eventID}).then((result) => {
-        console.log(`deleted ${result}`);
         res.redirect('/org/dashboard');
     }, (error) => {
         console.log(error);
