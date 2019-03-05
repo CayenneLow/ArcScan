@@ -104,7 +104,6 @@ router.get('/id/:id', (req,res) => {
                 // render QR Code
                 let partialURL = '/student/qrinput?eventID=' + result.id;
                 let fullURL = req.protocol+'://'+req.get('host')+partialURL;
-                console.log(fullURL);
                 QRCode.toDataURL(fullURL).then(url => {
                     res.render('event', {
                         event:currEvent, 
@@ -144,8 +143,6 @@ router.post('/createEvent', urlencodedParser, async (req, res) => {
         let newEvent = await buildEvent(req.body, req.user);
         newEvent = await newEvent.save();
         // if not recurring, activate code at start of date, deactivate at end
-        console.log(req.body.startDateTime);
-        console.log(req.body.endDateTime);
         agenda.schedule(req.body.startDateTime, 'start code', {id: newEvent.id});
         agenda.schedule(req.body.endDateTime, 'remove code', {id: newEvent.id});
     }
