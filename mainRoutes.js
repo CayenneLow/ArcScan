@@ -13,6 +13,10 @@ mongoose.connect(`mongodb://${key.mongodb.username}:${key.mongodb.password}@ds33
 
 module.exports = function(app) {
     app.get('/', (req, res) => { 
+        res.set({
+            'Content-Type': 'text/html; charset=utf-8',
+            'Access-Control-Allow-Origin' : '*'
+        });
         // redirects based on who's logged in
         if (req.user) { 
             if (req.user.type === "org") {

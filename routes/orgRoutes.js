@@ -12,6 +12,10 @@ const org = db.org;
 router.use('/event', eventRoutes);
 
 router.get('/orgLogin', (req,res) => {
+    res.set({
+        'Content-Type': 'text/html; charset=utf-8',
+        'Access-Control-Allow-Origin' : '*'
+    });
     let error = false;
     if (req.query.error) {
         error = true;
@@ -21,6 +25,10 @@ router.get('/orgLogin', (req,res) => {
 
 
 router.get('/orgSignUp', (req,res) => {
+    res.set({
+        'Content-Type': 'text/html; charset=utf-8',
+        'Access-Control-Allow-Origin' : '*'
+    });
     res.render('orgSignUp', {error: req.query.error});
 })
 
@@ -39,10 +47,14 @@ router.get('/dashboard', (req,res) => {
             } else {
                 eventArray = [];
             }
+            res.set({
+                'Content-Type': 'text/html; charset=utf-8',
+                'Access-Control-Allow-Origin' : '*'
+            });
             res.render('orgDashboard', {events:eventArray, user:req.user});
         });
         let t1 = Date.now();
-        console.log(`${t1-t0} milliseconds`);
+        console.log(`Listed events in ${t1-t0} milliseconds`);
 
         /*
         event.find({org: {_id:orgID}}).then((events) => {
