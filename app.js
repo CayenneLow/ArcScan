@@ -44,4 +44,6 @@ console.log(new Date());
 require('pretty-error').start();
 
 // listen to port
-app.listen(3000);
+app.listen(process.env.PORT || 3000, () => {
+    console.log("Server is now running");
+});
