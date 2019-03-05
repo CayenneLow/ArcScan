@@ -16,15 +16,12 @@ module.exports = function(app) {
         // redirects based on who's logged in
         if (req.user) { 
             if (req.user.type === "org") {
-                console.log("Currently logged in:" + req.user.name);
                 res.redirect('/org/dashboard');
             } else if (req.user.type === "user") {
                 let name = req.user.firstname + " " + req.user.lastname;
-                console.log("Currently logged in:" + name);
                 res.redirect('/student/input?found=true&event=false&duplicate=false');
             }
         } else {
-            console.log("Currently logged in:" + req.user);
             res.render('index');
         }
     });
