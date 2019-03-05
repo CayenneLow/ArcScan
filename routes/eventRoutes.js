@@ -47,12 +47,8 @@ agenda.define('recurrJob', async (job, done) => {
     eventDeets.endDateTime = newEnd;
     eventDeets.startDateTime = moment.parseZone(eventDeets.startDateTime).format();
     eventDeets.endDateTime = moment.parseZone(eventDeets.endDateTime).format();
-    console.log("=== in recurrJob ===");
-    console.log("Start: " + eventDeets.startDateTime);
-    console.log("End: " + eventDeets.endDateTime);
     let newEvent = await buildEvent(eventDeets, userDeets);
     newEvent = await newEvent.save();
-    console.log(newEvent);
     agenda.schedule(newEvent.startDateTime, 'start code', {id: newEvent.id});
     agenda.schedule(newEvent.endDateTime, 'remove code', {id: newEvent.id});
     done();
@@ -121,22 +117,14 @@ router.post('/createEvent', urlencodedParser, async (req, res) => {
     // scheduling
     // if recurring, every day within a range of dates
     // activate code at the event start time and deactivate at event end time
-    console.log(req.body.startDateTime);
-    req.body.startDateTime = moment.parseZone(req.body.startDateTime).format();
-    req.body.endDateTime = moment.parseZone(req.body.endDateTime).format();
+    req.body.startDateTime = moment(req.body.startDateTime).format();
+    req.body.endDateTime = moment(req.body.endDateTime).format();
     if (req.body.recurring === 'on') {
-        /*
-        startDateTime = new Date(startDateTime);
-        // day from 0-6 (0 is Sunday)
-        let day = Number(startDateTime.getDay());
-        dayString = convertNumToDay(day);
-        console.log(dayString);
-        */
         // repeat weekly
         agenda.every('1 week', 'recurrJob', {
             eventDeets: req.body,
             userDeets: req.user
-        }, {skipImmediate:true});
+        }, {skipImmediate:true}); // skipImmediate doesn't seem to be working
     }else {
         let newEvent = await buildEvent(req.body, req.user);
         newEvent = await newEvent.save();
