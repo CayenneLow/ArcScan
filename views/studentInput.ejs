@@ -2,7 +2,6 @@
 <html>
     <head>
         <title>Student</title>
-        <script type="text/javascript" src="https://rawcdn.githack.com/tobiasmuehl/instascan/4224451c49a701c04de7d0de5ef356dc1f701a93/bin/instascan.min.js"></script>
     </head>
     <body>
         <% include partials/nav.ejs %>
@@ -12,9 +11,6 @@
             <p> <a href="/student/stuLogin"> Login </a></p>
         <% } %>   
         <p><h1> Enter Event Code: </h1></p>
-        <input type="checkbox" name="qrcodescanner" id="qrcode">
-        QRCode Scanner</input>
-        <video id="qrscanner"></video>
         <form id="code" method="POST" action="/student/input">
             <p><input type="text" name="inputCode" required pattern="[0-9]{4}"
             oninvalid="setCustomValidity('Invalid Code')" 
@@ -30,31 +26,5 @@
             <% } %>
                 
         </form>
-        <script type="text/javascript">
-        let checkbox = document.getElementById("qrcode");
-        let scanner = new Instascan.Scanner({ 
-            video: document.getElementById('qrscanner') 
-        });
-        checkbox.addEventListener('change', () => {
-            if (checkbox.checked) {
-                scanner.addListener('scan', function (content) {
-                    window.location.href = content;
-                });
-                Instascan.Camera.getCameras().then(function (cameras) {
-                    if (cameras.length > 0) {
-                      scanner.start(cameras[0]);
-                    } else {
-                      console.error('No cameras found.');
-                    }
-                }).catch(function (e) {
-                    console.error(e);
-                });
-            } else {
-                scanner.stop();    
-            }
-        })
-        function qrscanner() {
-        }
-        </script>
     </body>
 </html>
