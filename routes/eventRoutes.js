@@ -79,10 +79,7 @@ agenda.define('remove code', (job,done) => {
 })();
 
 router.get('/id/:id', (req,res) => {
-    res.set({
-        'Content-Type': 'text/html; charset=utf-8',
-        'Access-Control-Allow-Origin' : '*'
-    });
+    agenda.jobs({}).then(job=>console.log(job));
     if (!req.user || req.user.type === 'user') {
         res.redirect('/');
     } else {
