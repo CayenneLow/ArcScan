@@ -9,7 +9,9 @@ const orgRoutes = require('./routes/orgRoutes.js');
 
 // database connection
 var mongoose = require('mongoose');
-mongoose.connect(`mongodb://${key.mongodb.username}:${key.mongodb.password}@ds331135.mlab.com:31135/arcscan`,{useNewUrlParser:true});
+const db = mongoose.connect(`mongodb://${key.mongodb.username}:${key.mongodb.password}@ds331135.mlab.com:31135/arcscan`,{useNewUrlParser:true});
+
+console.log(db.serverStatus().connections);
 
 module.exports = function(app) {
     app.get('/', (req, res) => { 
