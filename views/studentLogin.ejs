@@ -7,27 +7,6 @@
 	</head>
 	<body>
             <% include partials/nav.ejs %>
-<<<<<<< HEAD
-            <form method="POST" id="loginForm" action="/auth/stuLogin">
-                <label for="username"><b>zID: </b></label>
-                <input type="text" name="username" required pattern="[0-9]{7}"
-                oninvalid="setCustomValidity('Enter your 7 digit zID (only numbers)')" 
-                oninput="setCustomValidity('')"
-                ></input>
-                </br>
-                <label for="password"><b>Password: </b></label>
-                <input type="password" name="password" required></input>
-                <% if (qr === true) { %>
-                <input id="qr" name="qr" type="hidden" value="true">
-                <input id="event" name="event" type="hidden" value="<%=event%>">
-                <% } %>
-                <input type="submit"></input>
-            </form>
-            <% if (error) { %>
-            <p> Incorrect zID/Password </p>
-            <% } %>
-            <p> New User? <a href="/student/stuSignUp"> Sign Up </a></p>
-=======
         <div id="login-container"> 
             <div class="login-blocks login-right" class="">
                 <h1 class="logo">Arc<span style="color: white">Scan</span><a href="/"><span style="position:absolute;width:100%;height:100%;top:0;left: 0; z-index: 1;"></span></a></h1>
@@ -54,7 +33,5 @@
                 
             </div>
         </div>
-       
->>>>>>> FrontEnd
 	</body>
 </html>
