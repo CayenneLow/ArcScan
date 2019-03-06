@@ -27,7 +27,10 @@
                     </br>
                     <label for="password">Password:</label> <br>
                     <input type="password" name="password" required></input>
-                    
+                    <% if (qr === true) { %>
+		                <input id="qr" name="qr" type="hidden" value="true">
+		                <input id="event" name="event" type="hidden" value="<%=event%>">
+	                <% } %>
                     <p><input type="submit" value="Login"></input></p>
                 </form>
                 
