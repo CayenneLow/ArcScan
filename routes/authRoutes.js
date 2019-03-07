@@ -77,6 +77,10 @@ router.post('/stuLogin', passport.authenticate('local', {
 });
 
 router.post('/stuSignUp', urlencodedParser, async (req,res) => {
+    if (req.body.zID[0] == 'z') {
+       req.body.zID = req.body.zID.slice(1);
+    }
+    console.log(req.body.zID);
   let userResult = await db.user.findOne({zID:req.body.zID});
   if (userResult) {
       res.redirect('/student/stuSignUp/?error=zID');
