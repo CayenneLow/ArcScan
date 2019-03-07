@@ -24,7 +24,12 @@
                     <input type="text" name="username" required></input>
                     </br>
                     <label for="password">Password: </label>
-                    <input type="password" name="password" required></input>
+                    <input id="password" type="password" name="password" required></input>
+                    </br>
+                    <label for="confirm"><b>Confirm Password: </b></label>
+                    <input id="confirm" type="password" name="confirm" onblur="passConfirm()" required></input>
+                    <b><div id="match" style="display:none;"> Password matches </div>
+                    <div id="nomatch" style="display:none;"> Password does not match </div></b>
                     </br>
                     <label for="email">Email: </label>
                     <input type="email" name="email" required></input>
@@ -43,4 +48,19 @@
             </div>
         </div>
     </body>
+        <script>
+            function passConfirm() {
+                let pass = document.getElementById("password");
+                let confirm = document.getElementById("confirm");
+                let match = document.getElementById("match");
+                let nomatch = document.getElementById("nomatch");
+                if (confirm.value == pass.value) {
+                    match.style.display = 'inline';
+                    nomatch.style.display = 'none';
+                } else {
+                    match.style.display = 'none';
+                    nomatch.style.display = 'inline';
+                }
+            }
+        </script>
 </html>
