@@ -79,6 +79,10 @@ agenda.define('remove code', (job,done) => {
 })();
 
 router.get('/id/:id', (req,res) => {
+    res.set({
+        'Content-Type': 'text/html; charset=utf-8',
+        'Access-Control-Allow-Origin' : '*'
+    });
     if (!req.user || req.user.type === 'user') {
         res.redirect('/');
     } else {
@@ -99,7 +103,7 @@ router.get('/id/:id', (req,res) => {
                 })
                 // render QR Code
                 let partialURL = '/student/qrinput?eventID=' + result.id;
-                let fullURL = req.protocol+'://'+'192.168.43.200:3000'+partialURL;
+                let fullURL = req.protocol+'://'+req.get('host')+partialURL;
                 QRCode.toDataURL(fullURL).then(url => {
                     res.render('event', {
                         event:currEvent, 
@@ -114,7 +118,13 @@ router.get('/id/:id', (req,res) => {
     }
 });
 
-router.get('/createEvent', (req, res) => { res.render('createEvent'); }); 
+router.get('/createEvent', (req, res) => { 
+    res.set({
+        'Content-Type': 'text/html; charset=utf-8',
+        'Access-Control-Allow-Origin' : '*'
+    });
+    res.render('createEvent'); 
+}); 
 
 router.post('/createEvent', urlencodedParser, async (req, res) => {
     // extract event details, build event model
@@ -133,8 +143,6 @@ router.post('/createEvent', urlencodedParser, async (req, res) => {
         let newEvent = await buildEvent(req.body, req.user);
         newEvent = await newEvent.save();
         // if not recurring, activate code at start of date, deactivate at end
-        console.log(req.body.startDateTime);
-        console.log(req.body.endDateTime);
         agenda.schedule(req.body.startDateTime, 'start code', {id: newEvent.id});
         agenda.schedule(req.body.endDateTime, 'remove code', {id: newEvent.id});
     }

@@ -67,6 +67,10 @@ passport.deserializeUser((id,done) => {
 router.post('/stuLogin', passport.authenticate('local', {
     failureRedirect:'/student/stuLogin?error=true'
     }), (req,res) => {
+        res.set({
+            'Content-Type': 'text/html; charset=utf-8',
+            'Access-Control-Allow-Origin' : '*'
+        });
         if (req.body.qr) {
             events.findOne({_id:req.body.event}).then(result => {
                 signUpUser(result, req.user, res);
@@ -77,7 +81,10 @@ router.post('/stuLogin', passport.authenticate('local', {
 });
 
 router.post('/stuSignUp', urlencodedParser, (req,res) => {
-
+    res.set({
+        'Content-Type': 'text/html; charset=utf-8',
+        'Access-Control-Allow-Origin' : '*'
+    });
     db.user.findOne({zID:req.body.zID}).then((result)=>{
         if (result) {
             res.redirect('/student/stuSignUp/?error=zID');
@@ -118,10 +125,18 @@ router.post('/stuSignUp', urlencodedParser, (req,res) => {
 router.post('/orgLogin', passport.authenticate('local', {
                            failureRedirect:'/org/orgLogin?error=true'
                          }), (req,res) => {
+                            res.set({
+                                'Content-Type': 'text/html; charset=utf-8',
+                                'Access-Control-Allow-Origin' : '*'
+                            });
                            res.redirect('/org/dashboard');
 });
 
 router.post('/orgSignUp', urlencodedParser, (req,res) => {
+    res.set({
+        'Content-Type': 'text/html; charset=utf-8',
+        'Access-Control-Allow-Origin' : '*'
+    });
     db.org.findOne({username:req.body.username}).then((result) => {
         if (result) {
             res.redirect('/org/orgSignUp/?error=username');
@@ -154,6 +169,10 @@ router.post('/orgSignUp', urlencodedParser, (req,res) => {
 });
 
 router.get('/logout', (req,res)=> {
+    res.set({
+        'Content-Type': 'text/html; charset=utf-8',
+        'Access-Control-Allow-Origin' : '*'
+    });
     req.logout();
     res.redirect('/');
 })

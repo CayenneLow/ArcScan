@@ -8,6 +8,10 @@ const user = db.user;
 const org = db.org;
 
 router.get('/stuLogin', (req, res) => {
+    res.set({
+        'Content-Type': 'text/html; charset=utf-8',
+        'Access-Control-Allow-Origin' : '*'
+    });
     let error = false;
     if (req.query.error) {
         error = true;
@@ -34,6 +38,10 @@ router.get('/stuLogin', (req, res) => {
 });
 
 router.get('/stuSignUp', (req,res) => {
+    res.set({
+        'Content-Type': 'text/html; charset=utf-8',
+        'Access-Control-Allow-Origin' : '*'
+    });
     res.render('studentSignUp', {error: req.query.error});
 });
 
@@ -46,6 +54,10 @@ router.get('/input', (req,res) => {
             duplicate: req.query.duplicate,
             user:req.user
         };
+        res.set({
+            'Content-Type': 'text/html; charset=utf-8',
+            'Access-Control-Allow-Origin' : '*'
+        });
         res.render('studentInput', passIn);
     } else {
         res.redirect('/student/stuLogin');
