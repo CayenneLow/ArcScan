@@ -165,10 +165,8 @@ router.get('/id/:id/delete', (req,res) => {
     agenda.cancel({data:{id:eventID}}).then((err, numRemoved) => {
         if (err) {
             console.log(err);
-        } else {
-            console.log(numRemoved);
         }
-    })
+    });
 });
 
 module.exports = router;
