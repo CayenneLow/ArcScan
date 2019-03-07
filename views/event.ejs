@@ -30,7 +30,7 @@
                 <button onclick="refresh()" class="new-event-but" style="border:none;">Refresh List </button>
                 </div>
                 <h1> <%= event.name %> Event</h1>
-                <% if (event.code == ' ') { %>
+                <% if (event.code == null) { %>
                     Code: Code Expired
                     <% } else { %>
                     Code : <%= event.code %>
