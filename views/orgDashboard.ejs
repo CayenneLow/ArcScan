@@ -5,33 +5,34 @@
     </head>
     <body>
         <% include partials/nav.ejs %>
-        <% if (user) { %>
-            <p> <a href="/auth/logout"> Log Out </a></p>
-        <% } else {%>
-            <p> <a href="/org/orgLogin"> Login </a></p>
-        <% } %>   
-        <p><a href="/org/event/createEvent"> Create New Event </a></p>
-        <table>
-            <thead>
-                <th> Event Name </th>
-                <th> Actions </th>
-            </thead>
-        <% if (events.length == 0) { %>
-            </table>
-            <i> Create your first event! </i>
-        <% } else { %>
-            <% for (let i = 0; i < events.length; i++) { %>
-                <tr>
-                    <td>
-                        <a href="/org/event/id/<%= events[i].id %>"><%= events[i].name %></a>
-                    </td>
-                    <td>
-                        <a href="/org/event/id/<%= events[i].id %>/delete">Delete</a>
-                    </td>
-                <tr>
-        <% }} %>
+        <div id="index-title"> 
+            <div class="wrap">
+                <h1 class="logo">Arc<span style="color: white">Scan</span><a href="/"><span style="position:absolute;width:100%;height:100%;top:0;left: 0; z-index: 1;"></span></a></h1>
+            
+                <!-- logout/login button-->
+                <% if (user) { %>
+                    <p> <a href="/auth/logout" class="login-but"> Log Out </a></p>
+                <% } else {%>
+                    <p> <a href="/org/orgLogin" class="login-but"> Login </a></p>
+                <% } %>   
+                <!-- logout/login button--> 
+            </div>
+        </div>
+        <div id="org-dashboard-body">
+            <div class="wrap">
+            <a href="/org/event/createEvent" class="new-event-but"> Create New Event </a></p>
+            <h1><%= user.name %>'s Events</h1>
+            <% if (events.length == 0) { %>
+               <p> Create your first event! </p>
+           <% } else { %>
+                <% for (let i = 0; i < events.length; i++) { %>
+                    <div class="event-info-container"> 
+                            <div class="event-name"><%= events[i].name %> 
+                            </div><div class="event-info"><a href="/org/event/id/<%= events[i].id %>"><i class="fas fa-info-circle"></i></a></div><div class="event-info"> <a href="/org/event/id/<%= events[i].id %>/delete"><i class="fas fa-trash-alt"></i></a></div>
+                    </div>
+            <% }} %>
 
-        </table>
-        </ul>
+            </div>
+        </div>
     </body>
 </html>
