@@ -95,7 +95,7 @@ router.get('/qrinput', (req,res) => {
 
 // event: event object
 // user: req.user object
-function signUpUser(eventObj, user, res){
+async function signUpUser(eventObj, user, res){
     // check for duplicate signup
     let comparisonArray = eventObj.signed.map((sign) => {
         // first construct an array of all signed ids
@@ -106,9 +106,18 @@ function signUpUser(eventObj, user, res){
     
     if(comparisonArray.length < 1) {
         // Note for future: the ".then" is essential for update to work
-        event.update({_id:eventObj.id}, {$push : {signed:user}})
-        .then(()=>console.log("Signed Up"),(reject)=>console.log(reject));
-        res.redirect('/student/input?found=true&event=' + eventObj.name);
+        let ended = eventObj.code == null ? true : false;
+        if (!ended) {
+            event.update({_id:eventObj.id}, {$push : {signed:user}})
+                .then(()=> {
+                    console.log("Signed Up")
+                },(reject)=> {
+                    console.log(reject);
+                });
+            res.redirect('/student/input?found=true&event=' + eventObj.name);
+        } else {
+            res.redirect('/student/input?found=true&event=ended');
+        }
     } else {
         res.redirect('/student/input?found=true&event=false&duplicate=true')
     }
