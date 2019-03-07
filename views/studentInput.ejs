@@ -7,7 +7,9 @@
         <% include partials/nav.ejs %>
         <% if (user) { %>
             <p> <a href="/auth/logout"> Log Out </a></p>
-            <p> Hello, <%= user.firstname %> </p>
+            <p> Hello, <%= user.firstname %> 
+                <a href="/student/profile/<%= user.id %>"> View Profile </a>
+            </p>
         <% } else {%>
             <p> <a href="/student/stuLogin"> Login </a></p>
         <% } %>   

@@ -38,6 +38,19 @@ router.get('/stuSignUp', (req,res) => {
     res.render('studentSignUp', {error: req.query.error});
 });
 
+router.get('/profile/:id', async (req,res) => {
+    let userID = req.params.id;
+    let userResult;
+    if (req.query.arc == 'true') {
+        userResult = await user.findOneAndUpdate({_id : userID}, {$set:{arc:'on'}}, {new: true});
+    } else if (req.query.arc == 'false'){
+        userResult = await user.findOneAndUpdate({_id : userID}, {$set:{arc:'off'}}, {new: true});
+    } else {
+        userResult = await user.findOne({_id:userID});
+    }
+    res.render('stuProfile', {user: userResult});
+}); 
+
 router.get('/input', (req,res) => {
     // make sure only logged in users can access
     if (req.user && req.user.type === 'user'){

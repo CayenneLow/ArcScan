@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+	<head>
+        <meta charset="utf-8" />
+		<title>Profile</title>
+	</head>
+	<body>
+            <% include partials/nav.ejs %>
+            <a href="/student/input?found=true&event=false">Back to Home</a>
+            <br/>
+	    First Name: <%=user.firstname %>
+            <br/>
+	    Last Name: <%=user.lastname %>
+            <br/>
+	    zID: <%=user.zID %>
+            <br/>
+	    E-mail: <%=user.email %>
+            <br/>
+	    Arc Member?:
+                    <% if (user.arc == 'on') { %>
+                            Yes
+                            <a href="?arc=false"> No longer an Arc Member? </a>
+                         <% } else { %>
+                            No
+                            <a href="?arc=true"> Just became an Arc Member? </a>
+                         <% } %>
+            </body>
+</html>

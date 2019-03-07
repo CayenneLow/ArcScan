@@ -96,9 +96,10 @@ router.post('/stuSignUp', urlencodedParser, async (req,res) => {
                                       lastname: req.body.lastname,
                                       zID: req.body.zID,
                                       password: hash,
+                                      arc: req.body.arc,
                                       email: req.body.email
                                   });
-              newUser.save().then((success) => res.redirect('/student/stuLogin?zID='+newUser.zID),
+        newUser.save().then((success) => res.redirect('/student/stuLogin?zID='+newUser.zID),
                                   (error) => {
                                                 console.log(error);
                                                   res.redirect('/student/stuSignUp');
