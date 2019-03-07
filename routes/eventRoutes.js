@@ -79,7 +79,6 @@ agenda.define('remove code', (job,done) => {
 })();
 
 router.get('/id/:id', (req,res) => {
-    agenda.jobs({}).then(job=>console.log(job));
     if (!req.user || req.user.type === 'user') {
         res.redirect('/');
     } else {
