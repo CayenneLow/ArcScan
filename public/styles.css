@@ -126,6 +126,7 @@ body {
 	left:0px;
 	padding: 20px;
 	background-color: #E0E0E0;
+	margin-top: -50px;
 }
 
 @media only screen and (max-width: 600px) {
