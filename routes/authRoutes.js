@@ -114,36 +114,31 @@ router.post('/orgLogin', passport.authenticate('local', {
                            res.redirect('/org/dashboard');
 });
 
-router.post('/orgSignUp', urlencodedParser, (req,res) => {
-    db.org.findOne({username:req.body.username}).then((result) => {
-        if (result) {
-            res.redirect('/org/orgSignUp/?error=username');
-        } else {
-            db.org.findOne({email:req.body.email}).then((result) => {
-                if (result) {
-                    res.redirect('/org/orgSignUp/?error=email');
-                } else {
-                    db.user.findOne({email:req.body.email}).then((result) => {
-                        if (result) {
-                            res.redirect('/org/orgSignUp/?error=email');
-                        } else {
-                            bcrypt.hash(req.body.password, saltRounds).then(hash => {
-                                const newOrg = new db.org({
-                                    type: "org",
-                                    name: req.body.name,
-                                    username: req.body.username,
-                                    password: hash,
-                                    email: req.body.email
-                                });
-                                newOrg.save().then(res.redirect('/org/orgLogin?username='+newOrg.username));
-                            });
-                        }
-                    });
-                }
-            });
-        }
-    });
-
+router.post('/orgSignUp', urlencodedParser, async (req,res) => {
+  let orgResult = await db.org.findOne({username:req.body.username});
+  if (orgResult) {
+      res.redirect('/org/orgSignUp/?error=username');
+  } else {
+    orgResult = await db.org.findOne({email:req.body.email});
+    if (orgResult) {
+      res.redirect('/org/orgSignUp/?error=email');
+    } else {
+      let userResult = await db.user.findOne({email:req.body.email});
+      if (userResult) {
+        res.redirect('/org/orgSignUp/?error=email');
+      } else {
+        let hash = await bcrypt.hash(req.body.password, saltRounds);
+        const newOrg = new db.org({
+                                      type: "org",
+                                      name: req.body.name,
+                                      username: req.body.username,
+                                      password: hash,
+                                      email: req.body.email
+                                  });
+              newOrg.save().then(res.redirect('/org/orgLogin?username='+newOrg.username));
+      }
+    }
+  }
 });
 
 router.get('/logout', (req,res)=> {
