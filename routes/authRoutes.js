@@ -99,7 +99,7 @@ router.post('/stuSignUp', urlencodedParser, (req,res) => {
                                     password: hash,
                                     email: req.body.email
                                 });
-                                newUser.save().then((success) => res.redirect('/student/stuLogin'),
+                                newUser.save().then((success) => res.redirect('/student/stuLogin?zID='+newUser.zID),
                                                     (error) => {
                                                         console.log(error);
                                                         res.redirect('/student/stuSignUp');
