@@ -12,7 +12,15 @@ const org = db.org;
 router.use('/event', eventRoutes);
 
 router.get('/orgLogin', (req,res) => {
-    res.render('orgLogin', {client:req.user});
+    let error = false;
+    if (req.query.error) {
+        error = true;
+    }
+    res.render('orgLogin', { 
+        error: error, 
+        client:req.user,
+        username: req.query.username
+    });
 })
 
 
@@ -38,7 +46,7 @@ router.get('/dashboard', (req,res) => {
             res.render('orgDashboard', {events:eventArray, user:req.user});
         });
         let t1 = Date.now();
-        console.log(`${t1-t0} milliseconds`);
+        console.log(`Listed events in ${t1-t0} milliseconds`);
 
         /*
         event.find({org: {_id:orgID}}).then((events) => {

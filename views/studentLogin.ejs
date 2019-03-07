@@ -20,19 +20,21 @@
                 <p>Login with your zID and password</p>
                 <form method="POST" id="loginForm" action="/auth/stuLogin">
                     <label for="username">zID: </label> <br>
-                    <input type="text" name="username" required pattern="[0-9]{7}"
+                    <input type="text" name="username" required pattern="z{0,1}Z{0,1}[0-9]{7}"
                     oninvalid="setCustomValidity('Enter your 7 digit zID (only numbers)')" 
                     oninput="setCustomValidity('')"
-                    ></input>
+                    value="<%= zID %>"></input>
                     </br>
                     <label for="password">Password:</label> <br>
                     <input type="password" name="password" required></input>
-                    
+                    <% if (qr === true) { %>
+		                <input id="qr" name="qr" type="hidden" value="true">
+		                <input id="event" name="event" type="hidden" value="<%=event%>">
+	                <% } %>
                     <p><input type="submit" value="Login"></input></p>
                 </form>
                 
             </div>
         </div>
-       
 	</body>
 </html>

@@ -20,11 +20,10 @@
                 <p>Login with your Username and password</p>
                 <form method="POST" id="loginForm" action="/auth/orgLogin">
                     <label for="username"><b>Username: </b></label>
-                    <input type="text" name="username" required></input>
+                    <input type="text" name="username" value="<%= username %>"required></input>
                     </br>
                     <label for="password"><b>Password: </b></label>
                     <input type="password" name="password" required></input>
-
                     <input type="submit" value="Login"></input>
                 </form>
             </div>

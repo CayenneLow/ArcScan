@@ -4,39 +4,16 @@ recurring.addEventListener("change", () => {
     if (recurring.checked){
         let outerPTag = document.createElement('p');
         div.appendChild(outerPTag);
-        let text = document.createTextNode('Recurring Day:');
+        let text = document.createTextNode('Recurr until: ');
         outerPTag.appendChild(text);
-        let select = document.createElement('select');
-        select.id = "daySelection";
-        select.name = "daySelection";
-        outerPTag.appendChild(select);
-        // appending selection options
-        let days = [
-            "Monday", "Tuesday", "Wednesday", "Thursday",
-            "Friday", "Saturday", "Sunday"
-        ];
-        for (let i = 0; i < days.length; i++) {
-            let option = document.createElement("option");
-            option.value = days[i];
-            option.text = days[i];
-            select.appendChild(option);
-        }
 
-        outerPTag = document.createElement('p');
-        div.appendChild(outerPTag);
-        text = document.createTextNode('From');
+        let endRecurr = document.createElement('input');
+        endRecurr.type = 'date';
+        endRecurr.name = 'endRecurr';
+        outerPTag.appendChild(endRecurr);
+        
+        text = document.createTextNode('(Recurrs weekly)');
         outerPTag.appendChild(text);
-        let time = document.createElement('input');
-        time.type = 'time';
-        time.name = 'recurrFrom';
-        outerPTag.appendChild(time);
-
-        text = document.createTextNode('To');
-        outerPTag.appendChild(text);
-        time = document.createElement('input');
-        time.type = 'time';
-        time.name = 'recurrTo';
-        outerPTag.appendChild(time);
     } else {
         // removes all nodes from recurringDiv
         while (div.firstChild) {

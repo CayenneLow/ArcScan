@@ -23,13 +23,21 @@
                     <input type="text" name="lastname" required pattern="[A-Za-z ]{1,32}"></input>
                     </br>
                     <label for="zID"><b>zID: </b></label>
-                    <input type="text" name="zID" required pattern="[0-9]{7}"
-                    oninvalid="setCustomValidity('Enter your 7 digit zID (only numbers)')" 
+                    <input type="text" name="zID" required pattern="z{0,1}Z{0,1}[0-9]{7}"
+                    oninvalid="setCustomValidity('Enter your 7 digit zID')" 
                     oninput="setCustomValidity('')"
                     ></input>
                     </br>
                     <label for="password"><b>Password: </b></label>
-                    <input type="password" name="password" required></input>
+                    <input id="password" type="password" name="password" required></input>
+                    </br>
+                    <label for="confirm"><b>Confirm Password: </b></label>
+                    <input id="confirm" type="password" name="confirm" onblur="passConfirm()" required></input>
+                    <b><div id="match" style="display:none;"> Password matches </div>
+                    <div id="nomatch" style="display:none;"> Password does not match </div></b>
+                    </br>
+                    <label for="arc"><b>Arc Member? </b></label>
+                    <input type="checkbox" name="arc"></input>
                     </br>
                     <label for="email"><b>Email: </b></label>
                     <input type="email" name="email" required></input>
@@ -47,4 +55,19 @@
             </div>
         </div>
         </body>
+        <script>
+            function passConfirm() {
+                let pass = document.getElementById("password");
+                let confirm = document.getElementById("confirm");
+                let match = document.getElementById("match");
+                let nomatch = document.getElementById("nomatch");
+                if (confirm.value == pass.value) {
+                    match.style.display = 'inline';
+                    nomatch.style.display = 'none';
+                } else {
+                    match.style.display = 'none';
+                    nomatch.style.display = 'inline';
+                }
+            }
+        </script>
 </html>
