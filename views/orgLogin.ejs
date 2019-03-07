@@ -24,6 +24,11 @@
                     </br>
                     <label for="password"><b>Password: </b></label>
                     <input type="password" name="password" required></input>
+                <% if (error == true) { %>
+                    <span class="error-message">
+                        <p>Incorrect Username/Password</p>
+                    </span>
+                <% } %>
                     <input type="submit" value="Login"></input>
                 </form>
             </div>
