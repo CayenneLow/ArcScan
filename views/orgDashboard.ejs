@@ -20,8 +20,9 @@
         </div>
         <div id="org-dashboard-body">
             <div class="wrap">
-            <a href="/org/event/createEvent" class="new-event-but"> Create New Event </a></p>
-            <h1><%= user.name %>'s Events</h1>
+                <a href="/org/event/createEvent" class="new-event-but"> Create New Event </a>
+                <h1 class="soc-name"><%= user.name %>'s Events Computer Science and Engineering Scoeity</h1>
+
             <% if (events.length == 0) { %>
                <p> Create your first event! </p>
            <% } else { %>

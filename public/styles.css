@@ -645,3 +645,9 @@ color: #82BF4B;
 	outline:none;
 	background-color:#f9f9f9;
 }
+
+.soc-name {
+	max-width:calc(100% - 200px);
+	display:inline-block;
+}
+
