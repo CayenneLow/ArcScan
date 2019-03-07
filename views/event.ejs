@@ -34,6 +34,7 @@
                     Code: Code Expired
                     <% } else { %>
                     Code : <%= event.code %>
+                    <div id="qrcode"><p><img src="<%= url %>"/></p></div>
                     <% } %>
             <p> <b><%= event.startDateTime %></b> to <b><%= event.endDateTime %></b></p>
                 <p>Export to:</p>
