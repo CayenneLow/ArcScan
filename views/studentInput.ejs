@@ -10,21 +10,21 @@
             <div class="wrap">
                     <h1 class="logo">Arc<span style="color: white">Scan</span><a href="/"><span style="position:absolute;width:100%;height:100%;top:0;left: 0; z-index: 1;"></span></a></h1>
             </div>
-        </div>
-        <% if (user) { %>
-            <p> <a href="/auth/logout" class="login-but"> <i class="fas fa-sign-out-alt"></i></a></p>
-            <a class="login-but" style="right:120px" href="/student/profile/<%= user.id %>"> <i class="fas fa-user-alt"></i> </a>
-            </p>
-        <% } else {%>
-            <p> <a href="/student/stuLogin" class="login-but"><i class="fas fa-sign-in-alt"></i></a></p>
-        <% } %>   
+        </div> 
         <div id="stu-body"> 
+            <% if (user) { %>
+                <p> <a href="/auth/logout" class="login-but login-but-pos1"> <i class="fas fa-sign-out-alt"></i></a></p>
+                <a class="login-but login-but-pos2"href="/student/profile/<%= user.id %>"> <i class="fas fa-user-alt"></i> </a>
+                </p>
+            <% } else {%>
+                <p> <a href="/student/stuLogin" class="login-but login-but-pos1"><i class="fas fa-sign-in-alt"></i></a></p>
+            <% } %>  
             <div class="wrap">
                     <p><h1> Enter Event Code: </h1></p>
                     <form id="code" method="POST" action="/student/input">
                         <input type="text" name="inputCode" maxlength="4" required pattern="[0-9]{4}"
                         oninvalid="setCustomValidity('Invalid Code')" 
-                        oninput="setCustomValidity('')" placeholder="- - - -"
+                        oninput="setCustomValidity('')" placeholder="----"
                         > <p></p>
                         <input type="submit">
                         <% if (found == 'false') {%> 

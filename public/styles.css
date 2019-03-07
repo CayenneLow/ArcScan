@@ -24,6 +24,11 @@ body {
 	padding-right: 40px;
 }
 
+#index-title .wrap {
+	padding-left: 20px;
+	padding-right: 20px;
+}
+
 #index-title, #index-links {
 	padding: 30px;
 	min-height: 100%;
@@ -346,7 +351,7 @@ color: #82BF4B;
 
 }
 
-#signup-body input[type=datetime-local] {
+#signup-body input[type=datetime-local], #signup-body input[type=date] {
 	padding: 5px;
 	margin: 4px 0;
 	display: inline-block;
@@ -358,7 +363,7 @@ color: #82BF4B;
 	
 }
 
-#signup-body input[type=datetime-local]:focus {
+#signup-body input[type=datetime-local]:focus, #signup-body input[type=date]:focus {
 	outline:none;
 }
 
@@ -664,7 +669,33 @@ margin-top: 20px;
 	font-family: 'Cutive Mono', monospace;
 	text-align: center;
 	outline:none;
+	letter-spacing: 5px;
 	background-color:#f9f9f9;
+}
+
+.login-but-pos2 {
+	position: absolute;
+	right: 120px;
+}
+@media only screen and (max-width: 600px) {
+  #stu-body input[type=text]{
+    width: 100%;
+	}
+	#stu-body input[type=submit] {
+		width: 100%;
+	}
+
+	.login-but-pos1 {
+		position: absolute;
+		top: 15px;
+		right: 40px;
+	}
+	.login-but-pos2 {
+		position: absolute;
+		top: 55px;
+		right: 40px;
+	}
+
 }
 #profile-body {
 	padding: 40px;
@@ -691,6 +722,7 @@ margin-top: 20px;
 }
 #profile-body .wrap p:last-of-type{
 	border-bottom: 1px solid #ACD886;
+	height: 60px;
 }
 #profile-body .wrap h1{
 	text-transform: uppercase;
