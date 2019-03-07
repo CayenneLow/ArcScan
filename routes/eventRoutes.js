@@ -79,10 +79,6 @@ agenda.define('remove code', (job,done) => {
 })();
 
 router.get('/id/:id', (req,res) => {
-    res.set({
-        'Content-Type': 'text/html; charset=utf-8',
-        'Access-Control-Allow-Origin' : '*'
-    });
     if (!req.user || req.user.type === 'user') {
         res.redirect('/');
     } else {
@@ -122,10 +118,6 @@ router.get('/id/:id', (req,res) => {
 });
 
 router.get('/createEvent', (req, res) => { 
-    res.set({
-        'Content-Type': 'text/html; charset=utf-8',
-        'Access-Control-Allow-Origin' : '*'
-    });
     res.render('createEvent'); 
 }); 
 
