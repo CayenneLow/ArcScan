@@ -155,13 +155,20 @@ router.post('/createEvent', urlencodedParser, async (req, res) => {
 
 router.get('/id/:id/delete', (req,res) => {
     let eventID = req.params.id;
-    console.log(eventID);
     event.findOneAndDelete({_id:eventID}).then((result) => {
         res.redirect('/org/dashboard');
     }, (error) => {
         console.log(error);
         res.redirect('/org/dashboard');
     });
+    // delete from agenda
+    agenda.cancel({data:{id:eventID}}).then((err, numRemoved) => {
+        if (err) {
+            console.log(err);
+        } else {
+            console.log(numRemoved);
+        }
+    })
 });
 
 module.exports = router;
