@@ -5,21 +5,34 @@
 		<title>Create Event</title>
 	</head>
 	<body>
-            <% include partials/nav.ejs %>
-            <h1>Create Event</h1>
-            <form id="create" method="POST" action="/org/event/createEvent">
-                <p><label for="name"> Name of Event: </label>
-                <input type="text" name="name" required></input></p>
+        <div id="index-title"> 
+            <div class="wrap">
+                <h1 class="logo">Arc<span style="color: white">Scan</span><a href="/"><span style="position:absolute;width:100%;height:100%;top:0;left: 0; z-index: 1;"></span></a></h1>
+            </div>
+        </div>
+        <div id="signup-body"> 
+            <div class="wrap">
+                <% include partials/nav.ejs %>
+                <h1>Create Event</h1>
+                <form id="create" method="POST" action="/org/event/createEvent">
+                    <p><label for="name"> Name of Event: </label>
+                    <input type="text" name="name" required></input></p>
 
-                <p><label for="endDate"> Event Start: </label>
-                <input type="datetime-local" name="startDateTime" required></input>
-                
-                <p><label for="endDate"> Event End: </label>
-                <input type="datetime-local" name="endDateTime" required></input>
-                <input type="checkbox" name="recurring" id="recurring">Recurring Event</input>
-                <div id="recurringDiv"></div>
-                <p><input type="submit"></input></p>
-            </form>
+                    <p><label for="endDate"> Event Start Date & Time: </label>
+                    <input type="datetime-local" name="startDateTime" required></input>
+                    
+                    <p><label for="endDate"> Event End Date & Time: </label> <br>
+                    <input type="datetime-local" name="endDateTime" required></input>
+                    <p></p>
+                    <label class="check-wrap">
+                        <input type="checkbox" name="recurring" id="recurring">Make this a recurring event?
+                        <span class="checkmark"></span>
+                    </label>
+                    <div id="recurringDiv"></div>
+                    <p><input type="submit" value="Create Event!"></input></p>
+                </form>
+            </div>
+        </div>
 	</body>
         <script type="text/javascript" src="/createEventScript.js"></script>
 </html>
