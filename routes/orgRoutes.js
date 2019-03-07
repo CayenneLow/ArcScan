@@ -31,38 +31,20 @@ router.get('/orgSignUp', (req,res) => {
 
 router.get('/dashboard', (req,res) => {
     if (req.user && req.user.type === 'org'){
-        // temporary solution
-        // find all events
         let t0 = Date.now();
-        let eventArray = [];
-        event.find({}).then((events)=> {
-            events.forEach((event) => {
-               eventArray.push(event); 
-            })
-            if (req.user){
-                eventArray = eventArray.filter(event => event.org.id == req.user.id.toString());
+        // querying for events associated to org
+        event.find({'org._id':req.user.id.toString()}).then((events) => {
+            if (events.length > 0) {
+                events.forEach((event) => {
+                    event.printDate = moment(event.startDateTime).format('dddd MMMM Do YYYY, h:mm a')
+                });
+                res.render('orgDashboard', {events:events, user:req.user});
+                let t1 = Date.now();
+                console.log(`Listed events in ${t1-t0} milliseconds`);
             } else {
-                eventArray = [];
+                res.render('orgDashboard', {events:events, user:req.user});
             }
-            // adding printDate
-            eventArray.forEach((event) => {
-                event.printDate = moment(event.startDateTime).format('dddd MMMM Do YYYY, h:mm a')
-            })
-            res.render('orgDashboard', {events:eventArray, user:req.user});
-        });
-        let t1 = Date.now();
-        console.log(`Listed events in ${t1-t0} milliseconds`);
-
-        /*
-        event.find({org: {_id:orgID}}).then((events) => {
-            console.log(events);
-            let eventArray = [];
-            events.forEach((event) => {
-                eventArray.push({id: event.id, name: event.name});
-            });
-            res.render('organization', {events:eventArray});
         }, (error) => {console.log(error)});
-        */
     } else {
         res.redirect('/org/orgLogin');
     }

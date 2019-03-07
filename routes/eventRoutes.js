@@ -60,7 +60,7 @@ agenda.define('start code', (job,done) => {
     let id = job.attrs.data.id;
     randomNumber().then(code => {
         event.findOneAndUpdate({_id: id}, {$set:{code:code}}).then(result => {
-            if (result == NULL) {
+            if (result == null) {
                 console.log("start code encountered null event");
             } else {
                 console.log(`${result.name} has started`);
@@ -74,7 +74,7 @@ agenda.define('remove code', (job,done) => {
     // gen code
     let id = job.attrs.data.id;
     event.findOneAndUpdate({_id: id}, {$set:{code:''}}).then(result => {
-        if (result == NULL) {
+        if (result == null) {
             console.log("remove code encountered null event");
         } else {
             console.log(`${result.name} has ended`);
