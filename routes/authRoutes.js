@@ -76,42 +76,36 @@ router.post('/stuLogin', passport.authenticate('local', {
         }
 });
 
-router.post('/stuSignUp', urlencodedParser, (req,res) => {
-    db.user.findOne({zID:req.body.zID}).then((result)=>{
-        if (result) {
-            res.redirect('/student/stuSignUp/?error=zID');
-        } else {
-            db.user.findOne({email:req.body.email}).then((result => {
-                if(result) {
-                    res.redirect('/student/stuSignUp/?error=email');
-                } else {
-                    db.org.findOne({email:req.body.email}).then((result => {
-                        if (result) {
-                            res.redirect('/student/stuSignUp/?error=email');
-                        } else {
-                            bcrypt.hash(req.body.password, saltRounds).then(hash => {
-                                // store hash in db
-                                const newUser = new db.user({
-                                    type: "user",
-                                    firstname: req.body.firstname,
-                                    lastname: req.body.lastname,
-                                    zID: req.body.zID,
-                                    password: hash,
-                                    email: req.body.email
-                                });
-                                newUser.save().then((success) => res.redirect('/student/stuLogin?zID='+newUser.zID),
-                                                    (error) => {
-                                                        console.log(error);
-                                                        res.redirect('/student/stuSignUp');
-                                                    });
-                            });
-
-                        }
-                    }));
-                }
-            }));
-        }
-    });
+router.post('/stuSignUp', urlencodedParser, async (req,res) => {
+  let userResult = await db.user.findOne({zID:req.body.zID});
+  if (userResult) {
+      res.redirect('/student/stuSignUp/?error=zID');
+  } else {
+    userResult = await db.user.findOne({email:req.body.email});
+    if (userResult) {
+      res.redirect('/student/stuSignUp/?error=email');
+    } else {
+      let orgResult = await db.org.findOne({email:req.body.email});
+      if (orgResult) {
+        res.redirect('/student/stuSignUp/?error=email');
+      } else {
+        let hash = await bcrypt.hash(req.body.password, saltRounds);
+        const newUser = new db.user({
+                                      type: "user",
+                                      firstname: req.body.firstname,
+                                      lastname: req.body.lastname,
+                                      zID: req.body.zID,
+                                      password: hash,
+                                      email: req.body.email
+                                  });
+              newUser.save().then((success) => res.redirect('/student/stuLogin?zID='+newUser.zID),
+                                  (error) => {
+                                                console.log(error);
+                                                  res.redirect('/student/stuSignUp');
+                                              });
+      }
+    }
+  }
 });
 
 router.post('/orgLogin', passport.authenticate('local', {
