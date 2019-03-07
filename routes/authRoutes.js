@@ -77,7 +77,7 @@ router.post('/stuLogin', passport.authenticate('local', {
 });
 
 router.post('/stuSignUp', urlencodedParser, async (req,res) => {
-    if (req.body.zID[0] == 'z') {
+    if (req.body.zID[0] == 'z' || req.body.zID[0] == 'Z') {
        req.body.zID = req.body.zID.slice(1);
     }
     console.log(req.body.zID);
