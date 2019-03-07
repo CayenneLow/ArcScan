@@ -23,7 +23,7 @@
                     <input type="text" name="lastname" required pattern="[A-Za-z ]{1,32}"></input>
                     </br>
                     <label for="zID"><b>zID: </b></label>
-                    <input type="text" name="zID" required pattern="z{0,1}[0-9]{7}"
+                    <input type="text" name="zID" required pattern="z{0,1}Z{0,1}[0-9]{7}"
                     oninvalid="setCustomValidity('Enter your 7 digit zID')" 
                     oninput="setCustomValidity('')"
                     ></input>

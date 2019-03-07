@@ -20,7 +20,7 @@
                 <p>Login with your zID and password</p>
                 <form method="POST" id="loginForm" action="/auth/stuLogin">
                     <label for="username">zID: </label> <br>
-                    <input type="text" name="username" required pattern="[0-9]{7}"
+                    <input type="text" name="username" required pattern="z{0,1}Z{0,1}[0-9]{7}"
                     oninvalid="setCustomValidity('Enter your 7 digit zID (only numbers)')" 
                     oninput="setCustomValidity('')"
                     value="<%= zID %>"></input>
