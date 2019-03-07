@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+	<head>
+        <meta charset="utf-8" />
+        <title>Student Sign Up</title>
+        <link rel='shortcut icon' type="image/png" href="/images/ArcScan.png">
+	</head>
+	<body>
+        <% include partials/nav.ejs %>
+        <div id="index-title"> 
+            <div class="wrap">
+                    <h1 class="logo">Arc<span style="color: white">Scan</span><a href="/"><span style="position:absolute;width:100%;height:100%;top:0;left: 0; z-index: 1;"></span></a></h1>
+                <p>Quit waiting to sign those Arc forms!</p>
+            </div>
+        </div>
+        <div id="signup-body"> 
+            <div class="wrap">
+                <form method="POST" id="signupForm" action="/auth/stuSignUp">
+                    <label for="firstname"><b>First Name: </b></label>
+                    <input type="text" name="firstname" required pattern="[A-Za-z ]{1,32}"></input>
+                    </br>
+                    <label for="lastname"><b>Last Name: </b></label>
+                    <input type="text" name="lastname" required pattern="[A-Za-z ]{1,32}"></input>
+                    </br>
+                    <label for="zID"><b>zID: </b></label>
+                    <input type="text" name="zID" required pattern="z{0,1}Z{0,1}[0-9]{7}"
+                    oninvalid="setCustomValidity('Enter your 7 digit zID')" 
+                    oninput="setCustomValidity('')"
+                    ></input>
+                    </br>
+                    <label for="password"><b>Password: </b></label>
+                    <input id="password" type="password" name="password" required></input>
+                    </br>
+                    <label for="confirm"><b>Confirm Password: </b></label>
+                    <input id="confirm" type="password" name="confirm" onblur="passConfirm()" required></input>
+                    <b><div id="match" style="display:none;"> Password matches </div>
+                    <div id="nomatch" style="display:none;"> Password does not match </div></b>
+                    </br>
+                    <label for="arc"><b>Arc Member? </b></label>
+                    <input type="checkbox" name="arc"></input>
+                    </br>
+                    <label for="email"><b>Email: </b></label>
+                    <input type="email" name="email" required></input>
+
+                    <input type="submit"></input>
+                </form>
+                <span class="error-message">
+                <% if (error === "zID") { %>
+                    <p> zID already registered </p>
+                <% } else if(error === "email") { %>
+                    <p> Email already registered</p>
+                <% } %>
+                </span>
+             <a href="/student/stuLogin" class="block-buttons">Already have an student account? Login! </a></p>
+            </div>
+        </div>
+        </body>
+        <script>
+            function passConfirm() {
+                let pass = document.getElementById("password");
+                let confirm = document.getElementById("confirm");
+                let match = document.getElementById("match");
+                let nomatch = document.getElementById("nomatch");
+                if (confirm.value == pass.value) {
+                    match.style.display = 'inline';
+                    nomatch.style.display = 'none';
+                } else {
+                    match.style.display = 'none';
+                    nomatch.style.display = 'inline';
+                }
+            }
+        </script>
+</html>

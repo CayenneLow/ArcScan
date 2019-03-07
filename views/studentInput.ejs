@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>ArcScan</title>
+        <link rel='shortcut icon' type="image/png" href="/images/ArcScan.png">
+    </head>
+    <body>
+        <% include partials/nav.ejs %>
+        <div id="index-title"> 
+            <div class="wrap">
+                    <h1 class="logo">Arc<span style="color: white">Scan</span><a href="/"><span style="position:absolute;width:100%;height:100%;top:0;left: 0; z-index: 1;"></span></a></h1>
+            </div>
+        </div>
+        <% if (user) { %>
+            <p> <a href="/auth/logout" class="login-but"> <i class="fas fa-sign-out-alt"></i></a></p>
+            <a class="login-but" style="right:120px" href="/student/profile/<%= user.id %>"> <i class="fas fa-user-alt"></i> </a>
+            </p>
+        <% } else {%>
+            <p> <a href="/student/stuLogin" class="login-but"><i class="fas fa-sign-in-alt"></i></a></p>
+        <% } %>   
+        <div id="stu-body"> 
+            <div class="wrap">
+                    <p><h1> Enter Event Code: </h1></p>
+                    <form id="code" method="POST" action="/student/input">
+                        <input type="text" name="inputCode" maxlength="4" required pattern="[0-9]{4}"
+                        oninvalid="setCustomValidity('Invalid Code')" 
+                        oninput="setCustomValidity('')" placeholder="- - - -"
+                        > <p></p>
+                        <input type="submit">
+                        <% if (found == 'false') {%> 
+                            <p>Invalid Code </p>
+                        <% } else if (duplicate == 'true') { %>
+                            <p>You've already signed up to this event!</p>
+                        <% } else if (event == 'ended') { %>
+                            <p> Event has ended </p>
+                        <% } else if (event != 'false') { %></p>
+                            <p>Successfully signed up to <%= event %></p>
+                        <% } %>
+            </div>
+        </div> 
+        </form>
+    </body>
+</html>

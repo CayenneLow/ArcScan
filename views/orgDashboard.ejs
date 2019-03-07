@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title><%= user.name %>'s Events</title>
+        <link rel='shortcut icon' type="image/png" href="/images/ArcScan.png">
+    </head>
+    <body>
+        <% include partials/nav.ejs %>
+        <div id="index-title"> 
+            <div class="wrap">
+                <h1 class="logo">Arc<span style="color: white">Scan</span><a href="/"><span style="position:absolute;width:100%;height:100%;top:0;left: 0; z-index: 1;"></span></a></h1>
+            
+                <!-- logout/login button-->
+                <% if (user) { %>
+                    <p> <a href="/auth/logout" class="login-but"><i class="fas fa-sign-out-alt"></i></a></p>
+                <% } else {%>
+                    <p> <a href="/org/orgLogin" class="login-but"><i class="fas fa-sign-in-alt"></i></a></p>
+                <% } %>   
+                <!-- logout/login button--> 
+            </div>
+        </div>
+        <div id="org-dashboard-body">
+            <div class="wrap">
+                <a href="/org/event/createEvent" class="new-event-but"> Create New Event </a>
+                <h1 class="soc-name"><%= user.name %>'s Events</h1>
+
+            <% if (events.length == 0) { %>
+               <p> Create your first event! </p>
+           <% } else { %>
+                <% for (let i = 0; i < events.length; i++) { %>
+                    <div class="event-info-container"> 
+                            <div class="event-name"><%= events[i].name %> <br> 
+                            <div class="event-dt"><%= events[i].printDate %> </div>
+                            </div><div class="event-info">
+                                <a href="/org/event/id/<%= events[i].id %>"><i class="fas fa-info-circle"></i></a>
+                                <a href="/org/event/id/<%= events[i].id %>/delete"><i class="fas fa-trash-alt"></i></a>
+                            </div>
+                            <!-- DATE FOR EACH EVENT -->
+                            
+                    </div>
+            <% }} %>
+
+            </div>
+        </div>
+    </body>
+</html>

@@ -1,9 +1,16 @@
 const passport = require('passport');
 const express = require('express');
-const routes = require('./routes.js');
+const routes = require('./mainRoutes.js');
 const key = require('./config/keys');
 const bodyParser = require('body-parser').urlencoded({extended:true});
 const cookieSession = require('cookie-session');
+const tk = require('timekeeper');
+// database
+const db = require('./models/database.js');
+const job = db.job;
+const event = db.event;
+const user = db.user;
+const org = db.org;
 
 const app = express();
 
@@ -28,5 +35,15 @@ app.use(express.static('./public'));
 
 routes(app);
 
+/* Time Testing
+var time = new Date('March 10, 2019 16:41:45');
+tk.travel(time);
+console.log(new Date());
+*/
+// better errors
+require('pretty-error').start();
+
 // listen to port
-app.listen(3000);
+app.listen(process.env.PORT || 3000, () => {
+    console.log("Server is now running");
+});
