@@ -135,7 +135,7 @@ router.post('/orgSignUp', urlencodedParser, (req,res) => {
                                     password: hash,
                                     email: req.body.email
                                 });
-                                newOrg.save().then(res.redirect('/org/orgLogin'));
+                                newOrg.save().then(res.redirect('/org/orgLogin?username='+newOrg.username));
                             });
                         }
                     });

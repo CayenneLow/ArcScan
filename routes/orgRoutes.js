@@ -16,7 +16,11 @@ router.get('/orgLogin', (req,res) => {
     if (req.query.error) {
         error = true;
     }
-    res.render('orgLogin', { error: error, client:req.user});
+    res.render('orgLogin', { 
+        error: error, 
+        client:req.user,
+        username: req.query.username
+    });
 })
 
 
