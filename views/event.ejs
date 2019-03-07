@@ -33,6 +33,8 @@
             <button onclick="refresh()">Refresh List </button>
 
             <table id="signed" class="display nowrap" style="width:100%">
+                <!-- only for printing purposes -->
+                <caption style="display:none;"><%= event.org %> || <%= event.printDate %> </caption>
                 <thead>
                     <strong>
                     <th> First Name </th>

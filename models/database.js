@@ -8,6 +8,7 @@ const userSchema = new mongoose.Schema({
     lastname: String,
     zID: Number,
     password: String,
+    arc: String,
     email: mongoose.SchemaTypes.Email
 })
 

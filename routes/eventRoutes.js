@@ -91,10 +91,13 @@ router.get('/id/:id', (req,res) => {
             if (result) {
                 let startDateTime = moment(result.startDateTime).format('dddd MMMM Do YYYY, h:mm a')
                 let endDateTime = moment(result.endDateTime).format('dddd MMMM Do YYYY, h:mm a')
+                let printDate = moment(result.startDateTime).format('dddd MMMM Do YYYY')
                 let currEvent = {
                     name:result.name, 
                     startDateTime: startDateTime,
                     endDateTime: endDateTime,
+                    printDate: printDate,
+                    org: result.org.name,
                     code:result.code
                 };
                 let signedUsers = [];
