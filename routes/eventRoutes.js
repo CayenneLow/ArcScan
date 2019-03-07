@@ -3,7 +3,8 @@ const bodyParser = require('body-parser');
 const urlencodedParser = bodyParser.urlencoded({extended: true});
 let randomNumber = require('../functions/RNG.js');
 let convertNumToDay = require('../functions/convertToCron.js').convertNumToDay;
-let moment = require('moment'); let key = require('../config/keys.js');
+let moment = require('moment'); 
+let key = require('../config/keys.js');
 let connectionURL = `mongodb://${key.mongodb.username}:${key.mongodb.password}@ds331135.mlab.com:31135/arcscan`
 const Agenda = require('agenda');
 const agenda = new Agenda({db:{address: connectionURL, options:{useNewUrlParser: true}}});

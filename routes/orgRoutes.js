@@ -2,6 +2,7 @@ const router = require('express').Router();
 const bodyParser = require('body-parser');
 const urlencodedParser = bodyParser.urlencoded({extended: true});
 const eventRoutes = require('./eventRoutes.js');
+const moment = require('moment');
 
 // Database
 const db = require('../models/database.js');
@@ -43,6 +44,10 @@ router.get('/dashboard', (req,res) => {
             } else {
                 eventArray = [];
             }
+            // adding printDate
+            eventArray.forEach((event) => {
+                event.printDate = moment(event.startDateTime).format('dddd MMMM Do YYYY, h:mm a')
+            })
             res.render('orgDashboard', {events:eventArray, user:req.user});
         });
         let t1 = Date.now();

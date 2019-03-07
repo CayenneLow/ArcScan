@@ -30,6 +30,8 @@
                     <div class="event-info-container"> 
                             <div class="event-name"><%= events[i].name %> 
                             </div><div class="event-info"><a href="/org/event/id/<%= events[i].id %>"><i class="fas fa-info-circle"></i></a></div><div class="event-info"> <a href="/org/event/id/<%= events[i].id %>/delete"><i class="fas fa-trash-alt"></i></a></div>
+                            <!-- DATE FOR EACH EVENT -->
+                            <%= events[i].printDate %>
                     </div>
             <% }} %>
 
