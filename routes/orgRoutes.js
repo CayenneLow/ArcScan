@@ -52,17 +52,6 @@ router.get('/dashboard', (req,res) => {
         });
         let t1 = Date.now();
         console.log(`Listed events in ${t1-t0} milliseconds`);
-
-        /*
-        event.find({org: {_id:orgID}}).then((events) => {
-            console.log(events);
-            let eventArray = [];
-            events.forEach((event) => {
-                eventArray.push({id: event.id, name: event.name});
-            });
-            res.render('organization', {events:eventArray});
-        }, (error) => {console.log(error)});
-        */
     } else {
         res.redirect('/org/orgLogin');
     }
