@@ -2,27 +2,40 @@
 <html>
 	<head>
         <meta charset="utf-8" />
-		<title>Profile</title>
+      <title><%=user.firstname %> <%=user.lastname %>'s ArcScan Profile</title>
+      <link rel='shortcut icon' type="image/png" href="/images/ArcScan.png">
 	</head>
 	<body>
-            <% include partials/nav.ejs %>
-            <a href="/student/input?found=true&event=false">Back to Home</a>
-            <br/>
-	    First Name: <%=user.firstname %>
-            <br/>
-	    Last Name: <%=user.lastname %>
-            <br/>
-	    zID: <%=user.zID %>
-            <br/>
-	    E-mail: <%=user.email %>
-            <br/>
-	    Arc Member?:
-                    <% if (user.arc == 'on') { %>
-                            Yes
-                            <a href="?arc=false"> No longer an Arc Member? </a>
-                         <% } else { %>
-                            No
-                            <a href="?arc=true"> Just became an Arc Member? </a>
-                         <% } %>
-            </body>
+      <% include partials/nav.ejs %>
+      <div id="index-title"> 
+            <div class="wrap">
+                  <h1 class="logo">Arc<span style="color: white">Scan</span><a href="/"><span style="position:absolute;width:100%;height:100%;top:0;left: 0; z-index: 1;"></span></a></h1>
+                  <a href="/student/input?found=true&event=false" class="login-but"><i class="fas fa-undo-alt"></i></a>
+               </div>
+      </div>
+      <div id="profile-body"> 
+            <div class="wrap">
+               <h1><%=user.firstname %> <%=user.lastname %>'s ArcScan Profile</h1>
+               <p>
+               First Name: <%=user.firstname %>
+               </p>
+               <p>Last Name: <%=user.lastname %></p>
+               
+               <p>zID: <%=user.zID %></p>
+               <p>E-mail: <%=user.email %></p>
+               
+               <p>Arc Member:
+               
+                  <% if (user.arc == 'on') { %>
+                     Yes
+                     
+                     <a style="float:right" href="?arc=false"> Not an Arc Member? </a>
+                  <% } else { %>
+                     No 
+                     <a style="float:right" href="?arc=true"> I am an Arc Member? </a>
+                  <% } %>
+               </p>
+         </div>
+      </div>
+   </body>
 </html>

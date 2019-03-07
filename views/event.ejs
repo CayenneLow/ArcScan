@@ -14,14 +14,15 @@
 	<script type="text/javascript" language="javascript" src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.html5.min.js"></script>
 	<script type="text/javascript" language="javascript" src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.print.min.js"></script>
         <meta charset="utf-8" />
-            <title><%= event.name %></title>
+        <title><%= event.name %></title>
+        <link rel='shortcut icon' type="image/png" href="/images/ArcScan.png">
 	</head>
 	<body>
         <% include partials/nav.ejs %>
         <div id="index-title"> 
             <div class="wrap">
                 <h1 class="logo">Arc<span style="color: white">Scan</span><a href="/"><span style="position:absolute;width:100%;height:100%;top:0;left: 0; z-index: 1;"></span></a></h1>
-                <p><a href="/org/dashboard" class="login-but">Go Back</a></p>
+                <p><a href="/org/dashboard" class="login-but"><i class="fas fa-undo-alt"></i></a></p>
             </div>
         </div>
         <div id="org-dashboard-body">
@@ -29,14 +30,18 @@
                 <div class="refresh">
                 <button onclick="refresh()" class="new-event-but" style="border:none;">Refresh List </button>
                 </div>
-                <h1> <%= event.name %> Event</h1>
-                <% if (event.code == null) { %>
-                    Code: Code Expired
-                    <% } else { %>
-                    Code : <%= event.code %>
-                    <div id="qrcode"><p><img src="<%= url %>"/></p></div>
+                <h1 class="soc-name"> <%= event.name %> Event</h1>
+                <div class="event-dt"><p> <%= event.startDateTime %> - <%= event.endDateTime %></p></div>
+                <div class="qr-code">
+                    <% if (event.code == null) { %>
+                        Event Code: Code Expired
+                        <% } else { %>
+                        Event Code : <%= event.code %>
+                        <div id="qrcode"><p><img src="<%= url %>"/></p></div>
                     <% } %>
-            <p> <b><%= event.startDateTime %></b> to <b><%= event.endDateTime %></b></p>
+                </div>
+
+        
                 <p>Export to:</p>
                 <table id="signed" class="display nowrap event-table-wrap" style="width:100%">
                 <!-- only for printing purposes -->

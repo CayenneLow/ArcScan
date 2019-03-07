@@ -24,7 +24,7 @@ body {
 	padding-right: 40px;
 }
 
-#index-title, #index-links, #index-footer {
+#index-title, #index-links {
 	padding: 30px;
 	min-height: 100%;
 }
@@ -126,7 +126,6 @@ body {
 	left:0px;
 	padding: 20px;
 	background-color: #E0E0E0;
-	margin-top: -50px;
 }
 
 @media only screen and (max-width: 600px) {
@@ -556,28 +555,50 @@ color: #82BF4B;
 	width: 100%;
 	font-size: 30px;
 	margin-top: 30px;
+	position: relative;
 }
 
 .event-name {
-	min-width: calc(100% - 160px);
+	width: calc(100% - 200px);
 	display: inline-block;
 	padding: 30px;
 }
 .event-info  {
-	width: 80px;
+	width: 200px;
 	display: inline-block;
 	text-align: center;
 	color: #3E3C3B;
+	position: absolute;
+	top: 50%;
+	word-spacing: 40px;
+	transform: translateY(-50%);
 }
-
+.event-dt {
+	margin-top: 10px;
+	font-size: 20px;
+	color: #82BF4B;
+	font-style: italic;
+}
 .event-info a{
 	color: #82BF4B;
 }
 
 .event-table-wrap {
 	 padding: 20px;
-	 border: 1px dashed #E0E0E0;
+	 border: 1px solid black;
 	 margin-bottom: 10px;
+}
+
+.qr-code {
+margin-top: 20px;
+	padding: 30px;
+	text-align: center;
+	font-size: 30px;
+	border: 1px dashed #E0E0E0;
+	width: 350px;
+	position: relative;
+	left: 50%;
+	transform: translateX(-50%);
 }
 
 .refresh button{
@@ -630,7 +651,6 @@ color: #82BF4B;
 	width: 330px;
 	padding: 14px 20px;
 	border: none;
-	border-radius: 4px;
 	cursor: pointer;
 	font-family: 'Raleway', sans-serif;
 	
@@ -646,8 +666,40 @@ color: #82BF4B;
 	outline:none;
 	background-color:#f9f9f9;
 }
+#profile-body {
+	padding: 40px;
+}
+#profile-body .wrap{
+	margin-top: 30px;
+	border: 1px dashed #E0E0E0;
+	padding: 20px;
+}
+#profile-body .wrap{
+	margin-top: 30px;
+	border: 1px dashed #E0E0E0;
+	padding: 20px;
+}
 
+#profile-body a{
+	color: #82BF4B;
+	font-weight: bold;
+	text-decoration: none;
+}
+#profile-body .wrap p{
+	border-bottom: 1px solid #ACD886;
+	padding: 10px;
+}
+#profile-body .wrap p:last-of-type{
+	border-bottom: 1px solid #ACD886;
+}
+#profile-body .wrap h1{
+	text-transform: uppercase;
+	font-weight: bold;
+	font-size: 28px;
+	text-align: center;
+}
 .soc-name {
 	max-width:calc(100% - 200px);
 	display:inline-block;
 }
+

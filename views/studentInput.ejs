@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Student</title>
+        <title>ArcScan</title>
+        <link rel='shortcut icon' type="image/png" href="/images/ArcScan.png">
     </head>
     <body>
         <% include partials/nav.ejs %>
@@ -9,14 +10,13 @@
             <div class="wrap">
                     <h1 class="logo">Arc<span style="color: white">Scan</span><a href="/"><span style="position:absolute;width:100%;height:100%;top:0;left: 0; z-index: 1;"></span></a></h1>
             </div>
-            </div>
+        </div>
         <% if (user) { %>
-            <p> <a href="/auth/logout" class="login-but"> Log Out </a></p>
-            <p> Hello, <%= user.firstname %> 
-                <a href="/student/profile/<%= user.id %>"> View Profile </a>
+            <p> <a href="/auth/logout" class="login-but"> <i class="fas fa-sign-out-alt"></i></a></p>
+            <a class="login-but" style="right:120px" href="/student/profile/<%= user.id %>"> <i class="fas fa-user-alt"></i> </a>
             </p>
         <% } else {%>
-            <p> <a href="/student/stuLogin" class="login-but"> Login </a></p>
+            <p> <a href="/student/stuLogin" class="login-but"><i class="fas fa-sign-in-alt"></i></a></p>
         <% } %>   
         <div id="stu-body"> 
             <div class="wrap">

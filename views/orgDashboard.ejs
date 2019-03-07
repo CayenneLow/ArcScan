@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Organization</title>
+        <title><%= user.name %>'s Events</title>
+        <link rel='shortcut icon' type="image/png" href="/images/ArcScan.png">
     </head>
     <body>
         <% include partials/nav.ejs %>
@@ -11,9 +12,9 @@
             
                 <!-- logout/login button-->
                 <% if (user) { %>
-                    <p> <a href="/auth/logout" class="login-but"> Log Out </a></p>
+                    <p> <a href="/auth/logout" class="login-but"><i class="fas fa-sign-out-alt"></i></a></p>
                 <% } else {%>
-                    <p> <a href="/org/orgLogin" class="login-but"> Login </a></p>
+                    <p> <a href="/org/orgLogin" class="login-but"><i class="fas fa-sign-in-alt"></i></a></p>
                 <% } %>   
                 <!-- logout/login button--> 
             </div>
@@ -29,8 +30,11 @@
                 <% for (let i = 0; i < events.length; i++) { %>
                     <div class="event-info-container"> 
                             <div class="event-name"><%= events[i].name %> <br> 
-                                <%= events[i].printDate %>
-                            </div><div class="event-info"><a href="/org/event/id/<%= events[i].id %>"><i class="fas fa-info-circle"></i></a></div><div class="event-info"> <a href="/org/event/id/<%= events[i].id %>/delete"><i class="fas fa-trash-alt"></i></a></div>
+                            <div class="event-dt"><%= events[i].printDate %> </div>
+                            </div><div class="event-info">
+                                <a href="/org/event/id/<%= events[i].id %>"><i class="fas fa-info-circle"></i></a>
+                                <a href="/org/event/id/<%= events[i].id %>/delete"><i class="fas fa-trash-alt"></i></a>
+                            </div>
                             <!-- DATE FOR EACH EVENT -->
                             
                     </div>
