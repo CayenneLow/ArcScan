@@ -20,6 +20,7 @@ router.get('/stuLogin', (req, res) => {
                 error:error, 
                 client:req.user,
                 qr:qr, 
+                zID:'',
                 event:result.id
             });
         });
