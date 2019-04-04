@@ -26,6 +26,8 @@ async function buildEvent(form, org) {
         endDateTime: form.endDateTime,
         recurring: form.recurring,
         recurrEnd: form.recurrEnd,
+        long: form.long,
+        lat: form.lat,
         org: org
     });
     return newEvent;
@@ -135,7 +137,6 @@ router.post('/createEvent', urlencodedParser, async (req, res) => {
     // scheduling
     // if recurring, every day within a range of dates
     // activate code at the event start time and deactivate at event end time
-    console.log(req.body)
     req.body.startDateTime = moment(req.body.startDateTime).format();
     req.body.endDateTime = moment(req.body.endDateTime).format();
     if (req.body.recurring === 'on') {

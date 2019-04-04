@@ -29,6 +29,8 @@ const eventSchema = new mongoose.Schema({
     recurrEnd: String,
     code: Number,
     org: orgSchema,
+    long: Number,
+    lat: Number,
     signed: [userSchema]
 })
 
