@@ -59,7 +59,8 @@ router.get('/input', (req,res) => {
             event: req.query.event,
             found: req.query.found,
             duplicate: req.query.duplicate,
-            user:req.user
+            user:req.user,
+            location:req.query.location
         };
         res.render('studentInput', passIn);
     } else {
@@ -72,7 +73,7 @@ router.post('/input', urlencodedParser, (req, res) => {
     // query the event that has the code
     event.findOne({code:inputCode}).then(result => {
         if (result != null) {
-            signUpUser(result, req.user, res);
+            signUpUser(result, req.user, res, req);
         } else {
             res.redirect('/student/input?found=false&event=false&duplicate=true');
         }
@@ -85,7 +86,7 @@ router.get('/qrinput', (req,res) => {
         event.findOne({_id:eventID}).then(result => {
             console.log(result);
             if (result != null) {
-                signUpUser(result, req.user, res);
+                signUpUser(result, req.user, res, req);
             } else {
                 res.redirect('/student/input?found=false&event=false&duplicate=true');
             }
@@ -98,7 +99,7 @@ router.get('/qrinput', (req,res) => {
 
 // event: event object
 // user: req.user object
-async function signUpUser(eventObj, user, res){
+async function signUpUser(eventObj, user, res, req){
     // check for duplicate signup
     let comparisonArray = eventObj.signed.map((sign) => {
         // first construct an array of all signed ids
@@ -108,9 +109,9 @@ async function signUpUser(eventObj, user, res){
     });
     
     if(comparisonArray.length < 1) {
-        // Note for future: the ".then" is essential for update to work
         let ended = eventObj.code == null ? true : false;
-        if (!ended) {
+        if (!ended && checkLoc(req, eventObj)) {
+            // Note for future: the ".then" is essential for update to work
             event.update({_id:eventObj.id}, {$push : {signed:user}})
                 .then(()=> {
                     console.log("Signed Up")
@@ -119,11 +120,38 @@ async function signUpUser(eventObj, user, res){
                 });
             res.redirect('/student/input?found=true&event=' + eventObj.name);
         } else {
-            res.redirect('/student/input?found=true&event=ended');
+            if (ended) {
+                res.redirect('/student/input?found=true&event=ended');
+            } else {
+                // location error
+                res.redirect('/student/input?found=true&location=false');
+            }
         }
     } else {
         res.redirect('/student/input?found=true&event=false&duplicate=true')
     }
 }
+
+function checkLoc(req, eventObj) {
+    let long = Number(req.body.long);
+    let lat = Number(req.body.lat);
+    let offset = 0.0000089; 
+    // obtained from: https://stackoverflow.com/questions/7477003/calculating-new-longitude-latitude-from-old-n-meters
+    // long
+    let upBoundLong = 50 * offset + eventObj.long;
+    let lowBoundLong = 50 * offset - eventObj.long;
+    // lat
+    let upBoundLat = 50 * offset + eventObj.lat;
+    let lowBoundLat = 50 * offset - eventObj.lat;
+
+    // check
+    if (long >= lowBoundLong && long <= upBoundLong) {
+        if (lat >= lowBoundLat && lat <= upBoundLat) {
+            return true;
+        }
+    }
+    return false;
+}
+
 module.exports.router = router;
 module.exports.signUpUser = signUpUser;
