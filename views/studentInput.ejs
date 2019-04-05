@@ -56,9 +56,9 @@
             
             function currentLocFunc(place) {
                 let longitude = document.getElementById('long');
-                longitude.value = place.longitude;
+                longitude.value = place.coords.longitude;
                 let latitude = document.getElementById('lat');
-                latitude.value = place.latitude;
+                latitude.value = place.coords.latitude;
             }
         </script>
     </body>

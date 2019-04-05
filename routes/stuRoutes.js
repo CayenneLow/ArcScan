@@ -133,17 +133,18 @@ async function signUpUser(eventObj, user, res, req){
 }
 
 function checkLoc(req, eventObj) {
-    let long = Number(req.body.long);
-    let lat = Number(req.body.lat);
+    let long = (req.body.long);
+    let lat = (req.body.lat);
+    console.log(`Current Location: ${lat},${long}`);
     let offset = 0.0000089; 
     // obtained from: https://stackoverflow.com/questions/7477003/calculating-new-longitude-latitude-from-old-n-meters
     // long
-    let upBoundLong = 50 * offset + eventObj.long;
-    let lowBoundLong = 50 * offset - eventObj.long;
+    let upBoundLong = eventObj.long + 50 * offset;
+    let lowBoundLong = eventObj.long - 50 * offset;
     // lat
-    let upBoundLat = 50 * offset + eventObj.lat;
-    let lowBoundLat = 50 * offset - eventObj.lat;
-
+    let upBoundLat = eventObj.lat + 50 * offset;
+    let lowBoundLat = eventObj.lat - 50 * offset;
+    console.log("lowBoundLong" + lowBoundLong);
     // check
     if (long >= lowBoundLong && long <= upBoundLong) {
         if (lat >= lowBoundLat && lat <= upBoundLat) {
