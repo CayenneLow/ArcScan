@@ -39,6 +39,8 @@
                             <p> You're not in the proximity of the event! Note: It is HIGHLY Recommended to use a mobile device instead of a laptop </p>
                         <% } else if (event != 'false') { %></p>
                             <p>Successfully signed up to <%= event %></p>
+                        <% } else {%>
+                            <p> If you haven't yet, please allow location access for ArcScan to work properly </p>
                         <% } %>
                     </form>
             </div>
