@@ -31,7 +31,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 // static files
-//app.use(express.static('./public'));
+app.use(express.static('./public'));
 
 routes(app);
 
