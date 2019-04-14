@@ -26,6 +26,8 @@
                         oninvalid="setCustomValidity('Invalid Code')" 
                         oninput="setCustomValidity('')" placeholder="----"
                         > <p></p>
+                        <input type="hidden" name="long" id="long"></input>
+                        <input type="hidden" name="lat" id="lat"></input>
                         <input type="submit">
                         <% if (found == 'false') {%> 
                             <p>Invalid Code </p>
@@ -33,11 +35,33 @@
                             <p>You've already signed up to this event!</p>
                         <% } else if (event == 'ended') { %>
                             <p> Event has ended </p>
+                        <% } else if (location == 'false') {%>
+                            <p> You're not in the proximity of the event! Note: It is HIGHLY Recommended to use a mobile device instead of a laptop </p>
                         <% } else if (event != 'false') { %></p>
                             <p>Successfully signed up to <%= event %></p>
+                        <% } else {%>
+                            <p> If you haven't yet, please allow location access for ArcScan to work properly </p>
                         <% } %>
+                    </form>
             </div>
         </div> 
-        </form>
+        <script>
+            // get location
+            (function(){
+                // current location
+                if (navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition(currentLocFunc);
+                } else {
+                    console.log("doesn't support location");
+                }
+            })();
+            
+            function currentLocFunc(place) {
+                let longitude = document.getElementById('long');
+                longitude.value = place.coords.longitude;
+                let latitude = document.getElementById('lat');
+                latitude.value = place.coords.latitude;
+            }
+        </script>
     </body>
 </html>

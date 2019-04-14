@@ -26,6 +26,8 @@ async function buildEvent(form, org) {
         endDateTime: form.endDateTime,
         recurring: form.recurring,
         recurrEnd: form.recurrEnd,
+        long: form.long,
+        lat: form.lat,
         org: org
     });
     return newEvent;

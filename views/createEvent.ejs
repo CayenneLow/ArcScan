@@ -4,8 +4,13 @@
         <meta charset="utf-8" />
         <title>Create Event</title>
         <link rel='shortcut icon' type="image/png" href="/images/ArcScan.png">
+        <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.53.1/mapbox-gl.js'></script>
+        <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.53.1/mapbox-gl.css' rel='stylesheet' />
 	</head>
 	<body>
+        <style>
+        
+        </style>
         <div id="index-title"> 
             <div class="wrap">
                 <h1 class="logo">Arc<span style="color: white">Scan</span><a href="/"><span style="position:absolute;width:100%;height:100%;top:0;left: 0; z-index: 1;"></span></a></h1>
@@ -16,6 +21,7 @@
                 <% include partials/nav.ejs %>
                 <h1>Create Event</h1>
                 <form id="create" method="POST" action="/org/event/createEvent">
+                <div id="create-body">
                     <p><label for="name"> Name of Event: </label>
                     <input type="text" name="name" required></input></p>
 
@@ -30,10 +36,16 @@
                         <span class="checkmark"></span>
                     </label>
                     <div id="recurringDiv"></div>
+                    <input type="hidden" name="long" id="long"></input>
+                    <input type="hidden" name="lat" id="lat"></input>
+                </div>
+                    <label> Location:</label>
+                    <div id='map'></div>
                     <p><input type="submit" value="Create Event!"></input></p>
                 </form>
             </div>
         </div>
 	</body>
         <script type="text/javascript" src="/createEventScript.js"></script>
+        <script type="text/javascript" src="/locationScript.js"></script>
 </html>
