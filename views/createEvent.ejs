@@ -9,26 +9,7 @@
 	</head>
 	<body>
         <style>
-            #map { 
-                position:fixed; 
-                top:0; 
-                right:4000; 
-                width:40%; 
-                height:40%; 
-            }
-            .coordinates {
-                background: rgba(0,0,0,0.5);
-                color: #fff;
-                position: absolute;
-                bottom: 40px;
-                left: 10px;
-                padding:5px 10px;
-                margin: 0;
-                font-size: 11px;
-                line-height: 18px;
-                border-radius: 3px;
-                display: none;
-            }
+        
         </style>
         <div id="index-title"> 
             <div class="wrap">
@@ -40,6 +21,7 @@
                 <% include partials/nav.ejs %>
                 <h1>Create Event</h1>
                 <form id="create" method="POST" action="/org/event/createEvent">
+                <div id="create-body">
                     <p><label for="name"> Name of Event: </label>
                     <input type="text" name="name" required></input></p>
 
@@ -56,6 +38,8 @@
                     <div id="recurringDiv"></div>
                     <input type="hidden" name="long" id="long"></input>
                     <input type="hidden" name="lat" id="lat"></input>
+                </div>
+                    <label> Location:</label>
                     <div id='map'></div>
                     <p><input type="submit" value="Create Event!"></input></p>
                 </form>
