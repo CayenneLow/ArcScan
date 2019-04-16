@@ -2,6 +2,7 @@ let recurring = document.querySelector('#recurring');
 recurring.addEventListener("change", () => {
     let div = document.querySelector('#recurringDiv');
     if (recurring.checked){
+        /*
         let outerPTag = document.createElement('p');
         div.appendChild(outerPTag);
         let text = document.createTextNode('Recurr until: ');
@@ -13,6 +14,11 @@ recurring.addEventListener("change", () => {
         outerPTag.appendChild(endRecurr);
         
         text = document.createTextNode('(Recurrs weekly)');
+        outerPTag.appendChild(text);
+        */
+        let outerPTag = document.createElement('p');
+        div.appendChild(outerPTag);
+        let text = document.createTextNode('Feature Coming Soon!');
         outerPTag.appendChild(text);
     } else {
         // removes all nodes from recurringDiv
