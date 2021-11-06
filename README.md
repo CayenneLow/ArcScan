@@ -1,5 +1,5 @@
 # ArcScan
-Making Arc signups easier
+Replacing paper sign ups for Arc events with QR codes for maximized efficiency.
 
 # Demo Pitch
 
